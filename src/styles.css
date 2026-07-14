@@ -1,0 +1,202 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Premium Design System – International Student Registration Portal
+ *
+ * Color palette: Blue & White
+ * Typography: Manrope (headings) + Inter (body)
+ * Radius: 8px (controls), 12px (cards), 16px (panels)
+ */
+
+@theme inline {
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Custom semantic colors */
+  --color-primary-deep: var(--primary-deep);
+  --color-primary-navy: var(--primary-navy);
+  --color-primary-medium: var(--primary-medium);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-very-light: var(--primary-very-light);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+
+  /* Typography */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-heading: "Manrope", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+:root {
+  /* ── Brand Colors ── */
+  --primary: #155EEF;
+  --primary-foreground: #FFFFFF;
+  --primary-deep: #123A75;
+  --primary-navy: #102A43;
+  --primary-medium: #2E6FE8;
+  --primary-soft: #EAF2FF;
+  --primary-very-light: #F5F8FF;
+
+  /* ── Semantic ── */
+  --background: #FFFFFF;
+  --foreground: #172033;
+  --card: #FFFFFF;
+  --card-foreground: #172033;
+  --popover: #FFFFFF;
+  --popover-foreground: #172033;
+  --secondary: #EAF2FF;
+  --secondary-foreground: #123A75;
+  --muted: #F7F9FC;
+  --muted-foreground: #526174;
+  --accent: #F5F8FF;
+  --accent-foreground: #123A75;
+  --destructive: #C43D4B;
+  --destructive-foreground: #FFFFFF;
+  --success: #16875B;
+  --success-foreground: #FFFFFF;
+  --warning: #B7791F;
+  --warning-foreground: #FFFFFF;
+
+  /* ── Borders & Input ── */
+  --border: #D9E4F2;
+  --input: #D9E4F2;
+  --ring: #155EEF;
+
+  /* ── Charts ── */
+  --chart-1: #155EEF;
+  --chart-2: #123A75;
+  --chart-3: #2E6FE8;
+  --chart-4: #16875B;
+  --chart-5: #B7791F;
+
+  /* ── Sidebar (Admin) ── */
+  --sidebar: #102A43;
+  --sidebar-foreground: #CBD5E1;
+  --sidebar-primary: #155EEF;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #1A3A5C;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #1A3A5C;
+  --sidebar-ring: #155EEF;
+
+  /* ── Shadows ── */
+  --shadow-card: 0 1px 3px 0 rgb(16 42 67 / 0.04), 0 1px 2px -1px rgb(16 42 67 / 0.03);
+  --shadow-card-hover: 0 4px 8px -2px rgb(16 42 67 / 0.06), 0 2px 4px -2px rgb(16 42 67 / 0.04);
+  --shadow-modal: 0 16px 48px -12px rgb(16 42 67 / 0.15), 0 4px 12px -4px rgb(16 42 67 / 0.08);
+  --shadow-dropdown: 0 8px 24px -6px rgb(16 42 67 / 0.12), 0 2px 8px -2px rgb(16 42 67 / 0.06);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Heading font */
+  h1, h2, h3 {
+    font-family: var(--font-heading);
+  }
+
+  /* Focus ring */
+  *:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--muted-foreground);
+  }
+}
+
+/* ── Utility classes ── */
+@layer utilities {
+  .font-heading {
+    font-family: var(--font-heading);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+  .shadow-card-hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+  .shadow-modal {
+    box-shadow: var(--shadow-modal);
+  }
+  .shadow-dropdown {
+    box-shadow: var(--shadow-dropdown);
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
