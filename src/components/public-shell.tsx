@@ -39,6 +39,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-14 items-center justify-between gap-3">
             <Link to="/register" className="flex min-w-0 items-center gap-2">
+              <img src="/logo.png" alt="Logo" className="h-8 w-8 object-contain" />
               <span className="font-heading text-[15px] font-bold tracking-tight text-primary-navy sm:text-base">
                 International Student Registration
               </span>

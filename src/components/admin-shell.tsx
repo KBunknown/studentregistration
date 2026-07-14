@@ -109,9 +109,7 @@ export function AdminShell({ children, title }: { children: ReactNode; title: st
 
   const SidebarHeader = (
     <div className="flex h-14 items-center gap-2.5 px-4">
-      <span className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-white">
-        <ShieldCheck className="h-4 w-4" />
-      </span>
+      <img src="/logo.png" alt="Logo" className="h-8 w-8 object-contain rounded-full bg-white p-0.5" />
       <span className="font-heading text-sm font-semibold text-white">Admin Console</span>
     </div>
   );
@@ -204,9 +202,7 @@ export function AdminShell({ children, title }: { children: ReactNode; title: st
           {/* Drawer header */}
           <div className="flex h-14 items-center justify-between px-4">
             <div className="flex items-center gap-2.5">
-              <span className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-white">
-                <ShieldCheck className="h-4 w-4" />
-              </span>
+              <img src="/logo.png" alt="Logo" className="h-8 w-8 object-contain rounded-full bg-white p-0.5" />
               <span className="font-heading text-sm font-semibold text-white">Admin Console</span>
             </div>
             <button
