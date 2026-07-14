@@ -15,7 +15,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-primary-very-light px-4">
+    <div className="flex min-h-screen items-center justify-center bg-transparent px-4">
       <div className="max-w-md text-center">
         <p className="font-heading text-8xl font-bold text-primary/20">404</p>
         <h1 className="mt-4 text-xl font-semibold text-foreground">
@@ -48,7 +48,7 @@ function ErrorComponent({
   const router = useRouter();
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-primary-very-light px-4">
+    <div className="flex min-h-screen items-center justify-center bg-transparent px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
           This page didn't load

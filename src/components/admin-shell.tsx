@@ -133,7 +133,7 @@ export function AdminShell({ children, title }: { children: ReactNode; title: st
   /* ── Render ─────────────────────────────────────────────────────── */
 
   return (
-    <div className="min-h-screen bg-muted">
+    <div className="min-h-screen bg-transparent">
       <div className="flex min-h-screen">
         {/* ── Desktop sidebar ──────────────────────────────────────── */}
         <aside className="hidden w-64 shrink-0 flex-col bg-primary-navy lg:flex">
@@ -145,7 +145,7 @@ export function AdminShell({ children, title }: { children: ReactNode; title: st
         {/* ── Main content area ────────────────────────────────────── */}
         <div className="flex min-w-0 flex-1 flex-col">
           {/* Top header bar */}
-          <header className="sticky top-0 z-20 flex h-14 items-center justify-between gap-3 border-b border-border bg-white px-4 sm:px-6">
+          <header className="sticky top-0 z-20 flex h-14 items-center justify-between gap-3 border-b border-white/50 bg-white/60 backdrop-blur-md shadow-sm px-4 sm:px-6">
             <div className="flex min-w-0 items-center gap-2">
               <button
                 type="button"

@@ -137,7 +137,12 @@
   }
 
   body {
-    background-color: var(--color-background);
+    background-color: #f0f7ff;
+    background-image: 
+      radial-gradient(circle at 15% 50%, rgba(200, 230, 255, 0.6), transparent 50%),
+      radial-gradient(circle at 85% 30%, rgba(180, 220, 255, 0.5), transparent 50%),
+      radial-gradient(circle at 50% 100%, rgba(220, 240, 255, 0.5), transparent 50%);
+    background-attachment: fixed;
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -179,7 +184,11 @@
   }
 
   .shadow-card {
-    box-shadow: var(--shadow-card);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 8px 32px 0 rgba(21, 94, 239, 0.05);
   }
   .shadow-card-hover {
     box-shadow: var(--shadow-card-hover);

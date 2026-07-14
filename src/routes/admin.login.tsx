@@ -42,7 +42,7 @@ function Login() {
     "block w-full rounded-md border border-border bg-white px-3 py-2.5 h-11 text-sm text-foreground shadow-sm outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground";
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-primary-very-light p-4">
+    <div className="flex min-h-screen items-center justify-center bg-transparent p-4">
       <div className="w-full max-w-md">
         <div className="mb-8 flex flex-col items-center text-center">
           <span className="grid h-12 w-12 place-items-center rounded-xl bg-primary text-primary-foreground shadow-card">

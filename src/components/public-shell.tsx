@@ -33,9 +33,9 @@ export function PublicShell({ children }: { children: ReactNode }) {
   const { t } = useI18n();
   const [open, setOpen] = useState(false);
   return (
-    <div className="min-h-screen flex flex-col bg-primary-very-light">
+    <div className="min-h-screen flex flex-col bg-transparent">
       {/* Slim top header */}
-      <header className="sticky top-0 z-30 border-b border-border bg-white">
+      <header className="sticky top-0 z-30 border-b border-white/50 bg-white/60 backdrop-blur-md shadow-sm">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-14 items-center justify-between gap-3">
             <Link to="/register" className="flex min-w-0 items-center gap-2">
@@ -117,7 +117,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
         </div>
       </header>
       <main className="flex-1">{children}</main>
-      <footer className="border-t border-border bg-white">
+      <footer className="border-t border-white/50 bg-white/40 backdrop-blur-sm">
         <div className="mx-auto flex max-w-5xl flex-col items-start justify-between gap-3 px-4 py-5 text-xs text-muted-foreground sm:flex-row sm:items-center sm:px-6 lg:px-8">
           <p>© {new Date().getFullYear()} International Student Registration</p>
           <div className="flex items-center gap-4">

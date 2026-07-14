@@ -319,7 +319,7 @@ function RegisterForm() {
 
   return (
     <PublicShell>
-      <div className="min-h-screen bg-primary-very-light">
+      <div className="min-h-screen bg-transparent">
         <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
           <div className="mb-6 text-center">
             <h1 className="font-heading text-2xl font-bold text-primary-navy sm:text-3xl">
