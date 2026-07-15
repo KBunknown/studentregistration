@@ -1,12 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>International Student Registration</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration | EduPortal</title>
+    <meta name="description" content="Secure and easy student registration for our academic institution.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 10px; color: var(--primary-blue);"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            EduPortal
+        </div>
+        <div class="header-controls">
+            <select class="language-switch" aria-label="Language Switch">
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="es">Español</option>
+            </select>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <div class="glass-container">
+            <aside class="supporting-panel">
+                <div class="branding">
+                    <h1>Student Registration</h1>
+                    <p>Join our academic community and begin your journey towards excellence. Please fill out the registration form carefully.</p>
+                </div>
+                <div class="emblem-container">
+                    <img src="assets/emblem.png" alt="Institutional Emblem" class="emblem">
+                </div>
+            </aside>
+
+            <section class="form-section">
+                <!-- Registration Step -->
+                <div id="step-registration" class="step active">
+                    <h2>Registration Form</h2>
+                    <form id="registration-form">
+                        
+                        <div class="form-group-section">
+                            <h3>Personal Information</h3>
+                            <div class="form-grid">
+                                <div class="input-group">
+                                    <label for="fullName">Full Name</label>
+                                    <input type="text" id="fullName" required placeholder="Enter your full name">
+                                </div>
+                                <div class="input-group">
+                                    <label for="gender">Gender</label>
+                                    <select id="gender" required>
+                                        <option value="" disabled selected>Select gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="input-group full-width">
+                                    <label for="country">Country</label>
+                                    <input type="text" id="country" required placeholder="Enter your country">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group-section">
+                            <h3>Contact Information</h3>
+                            <div class="form-grid">
+                                <div class="input-group full-width">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" required placeholder="Enter your email address">
+                                </div>
+                                <div class="input-group">
+                                    <label for="phoneNumber">Phone Number</label>
+                                    <input type="tel" id="phoneNumber" required placeholder="Enter your phone number">
+                                </div>
+                                <div class="input-group">
+                                    <label for="whatsappNumber">WhatsApp Number</label>
+                                    <input type="tel" id="whatsappNumber" required placeholder="Enter your WhatsApp number">
+                                </div>
+                                <div class="input-group checkbox-group full-width">
+                                    <input type="checkbox" id="sameAsPhone">
+                                    <label for="sameAsPhone">My WhatsApp number is the same as my phone number</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group-section">
+                            <h3>Academic Information</h3>
+                            <div class="form-grid">
+                                <div class="input-group">
+                                    <label for="programme">Programme</label>
+                                    <select id="programme" required>
+                                        <option value="" disabled selected>Select a programme</option>
+                                        <option value="BSc Computer Science">BSc Computer Science</option>
+                                        <option value="BSc Business Administration">BSc Business Administration</option>
+                                        <option value="BSc Engineering">BSc Engineering</option>
+                                        <option value="BSc Nursing">BSc Nursing</option>
+                                        <option value="BSc Economics">BSc Economics</option>
+                                        <option value="Other Program">Other Program</option>
+                                    </select>
+                                </div>
+                                <div class="input-group" id="otherProgrammeGroup" style="display: none;">
+                                    <label for="otherProgramme">Specify BSc Programme</label>
+                                    <input type="text" id="otherProgramme" placeholder="Enter your BSc programme">
+                                </div>
+                                <div class="input-group">
+                                    <label for="indexNumber">Index Number</label>
+                                    <input type="text" id="indexNumber" required placeholder="Enter your index number">
+                                </div>
+                                <div class="input-group">
+                                    <label for="level">Level</label>
+                                    <select id="level" required>
+                                        <option value="" disabled selected>Select level</option>
+                                        <option value="100">Level 100</option>
+                                        <option value="200">Level 200</option>
+                                        <option value="300">Level 300</option>
+                                        <option value="400">Level 400</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label>Expected Graduation Year</label>
+                                    <div id="expectedGradYear" class="info-panel">--</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group-section consent-section">
+                            <div class="input-group checkbox-group">
+                                <input type="checkbox" id="consent" required>
+                                <label for="consent">I confirm the information provided is accurate and consent to its processing for registration purposes.</label>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">Review Information</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Review Step -->
+                <div id="step-review" class="step">
+                    <h2>Review Information</h2>
+                    <p style="margin-bottom: 2rem; color: var(--text-muted);">Please review your details carefully before submitting.</p>
+                    <div class="review-content" id="reviewContent">
+                        <!-- Populated by JS -->
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" id="btn-edit" class="btn-secondary">Edit Information</button>
+                        <button type="button" id="btn-submit" class="btn-primary">Submit Registration</button>
+                    </div>
+                </div>
+
+                <!-- Success Step -->
+                <div id="step-success" class="step">
+                    <div class="success-icon">
+                        <svg viewBox="0 0 24 24" width="40" height="40" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
+                    <h2>Registration Successful</h2>
+                    <p style="margin-bottom: 2.5rem; color: var(--text-muted);">Your registration has been officially received.</p>
+                    <div class="success-details" id="successDetails">
+                        <!-- Populated by JS -->
+                    </div>
+                    <div class="form-actions" style="justify-content: center; margin-top: 3.5rem;">
+                        <button type="button" class="btn-primary" onclick="window.location.reload()">Start New Registration</button>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
 </html>
