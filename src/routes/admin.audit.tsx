@@ -12,7 +12,7 @@ function Audit() {
     <AdminShell title="Audit Log">
       <p className="text-sm text-muted-foreground mb-6">Chronological record of administrative actions taken in the portal.</p>
       
-      <div className="rounded-xl border border-border bg-white shadow-card overflow-hidden">
+      <div className="glass-panel rounded-xl shadow-card overflow-hidden">
         <ul className="divide-y divide-border">
           {MOCK_AUDIT.map((e) => (
             <li key={e.id} className="p-5 hover:bg-muted/30 transition-colors">

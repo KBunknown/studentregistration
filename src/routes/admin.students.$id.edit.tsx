@@ -46,7 +46,7 @@ function EditStudent() {
         <ArrowLeft className="h-4 w-4" /> Back to profile
       </Link>
       
-      <form onSubmit={save} className="mt-6 rounded-xl border border-border bg-white p-6 shadow-card sm:p-8">
+      <form onSubmit={save} className="mt-6 glass-panel rounded-xl p-6 shadow-card sm:p-8">
         <h2 className="mb-6 font-heading text-lg font-semibold text-primary-navy">Edit Profile Details</h2>
         <div className="grid gap-5 sm:grid-cols-2">
           <label className="grid gap-1.5">

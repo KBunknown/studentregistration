@@ -1,9 +1,30 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Users, CalendarCheck2, CalendarRange, GraduationCap, Globe2, BookOpen, Copy, UserCheck, CalendarDays } from "lucide-react";
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  LineChart, Line, PieChart, Pie, Cell, Legend,
+  Users,
+  CalendarCheck2,
+  CalendarRange,
+  GraduationCap,
+  Globe2,
+  BookOpen,
+  Copy,
+  UserCheck,
+  CalendarDays,
+} from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
 } from "recharts";
 import { AdminShell } from "@/components/admin-shell";
 import { getAllRegistrations } from "@/lib/reg-store";
@@ -13,16 +34,39 @@ export const Route = createFileRoute("/admin/")({
   component: Dashboard,
 });
 
-const COLORS = ["#155EEF", "#123A75", "#2E6FE8", "#16875B", "#B7791F", "#C43D4B", "#8B5CF6", "#0EA5E9"];
+const COLORS = [
+  "#155EEF",
+  "#123A75",
+  "#2E6FE8",
+  "#16875B",
+  "#B7791F",
+  "#C43D4B",
+  "#8B5CF6",
+  "#0EA5E9",
+];
 
-function Stat({ icon: Icon, label, value, hint }: { icon: React.ComponentType<{ className?: string }>; label: string; value: string | number; hint?: string }) {
+function Stat({
+  icon: Icon,
+  label,
+  value,
+  hint,
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  value: string | number;
+  hint?: string;
+}) {
   return (
-    <div className="rounded-lg border border-border bg-white p-5 shadow-card hover:shadow-card-hover transition-shadow">
+    <div className="glass-panel rounded-xl p-5 transition-all hover:shadow-card-hover">
       <div className="flex items-center justify-between">
         <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary-soft text-primary">
           <Icon className="h-4 w-4" />
         </span>
-        {hint && <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">{hint}</span>}
+        {hint && (
+          <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+            {hint}
+          </span>
+        )}
       </div>
       <p className="mt-4 font-heading text-2xl font-bold tabular-nums text-foreground">{value}</p>
       <p className="mt-1 text-sm text-muted-foreground">{label}</p>
@@ -32,9 +76,9 @@ function Stat({ icon: Icon, label, value, hint }: { icon: React.ComponentType<{ 
 
 function ChartCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-lg border border-border bg-white p-5 shadow-card">
-      <h3 className="font-heading text-sm font-semibold text-foreground mb-4">{title}</h3>
-      <div className="h-72">{children}</div>
+    <div className="glass-panel rounded-xl p-5">
+      <h3 className="font-heading mb-4 text-sm font-semibold text-foreground">{title}</h3>
+      <div className="h-64 sm:h-72">{children}</div>
     </div>
   );
 }
@@ -48,7 +92,9 @@ function Dashboard() {
     const month = new Date().getMonth();
     const year = new Date().getFullYear();
     const total = regs.length;
-    const todayCount = regs.filter((r) => new Date(r.registrationDate).toDateString() === today).length;
+    const todayCount = regs.filter(
+      (r) => new Date(r.registrationDate).toDateString() === today,
+    ).length;
     const monthCount = regs.filter((r) => {
       const d = new Date(r.registrationDate);
       return d.getMonth() === month && d.getFullYear() === year;
@@ -85,7 +131,9 @@ function Dashboard() {
   const byLevel = useMemo(() => {
     const m = new Map<string, number>();
     regs.forEach((r) => m.set(r.level, (m.get(r.level) || 0) + 1));
-    return Array.from(m.entries()).map(([name, value]) => ({ name, value })).sort((a, b) => a.name.localeCompare(b.name));
+    return Array.from(m.entries())
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => a.name.localeCompare(b.name));
   }, [regs]);
 
   const byMonth = useMemo(() => {
@@ -95,7 +143,20 @@ function Dashboard() {
       const key = d.toLocaleString(undefined, { month: "short" });
       m.set(key, (m.get(key) || 0) + 1);
     });
-    const order = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const order = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
     return order.filter((k) => m.has(k)).map((k) => ({ name: k, value: m.get(k)! }));
   }, [regs]);
 
@@ -137,7 +198,15 @@ function Dashboard() {
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={byCountry} margin={{ left: 8, right: 8 }}>
               <CartesianGrid stroke="#EAF2FF" vertical={false} />
-              <XAxis dataKey="name" stroke="#526174" fontSize={11} interval={0} angle={-20} textAnchor="end" height={60} />
+              <XAxis
+                dataKey="name"
+                stroke="#526174"
+                fontSize={11}
+                interval={0}
+                angle={-20}
+                textAnchor="end"
+                height={60}
+              />
               <YAxis stroke="#526174" fontSize={11} />
               <Tooltip cursor={{ fill: "#F5F8FF" }} />
               <Bar dataKey="value" fill="#123A75" radius={[4, 4, 0, 0]} />
@@ -148,8 +217,17 @@ function Dashboard() {
         <ChartCard title="Registrations by level">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
-              <Pie data={byLevel} dataKey="value" nameKey="name" innerRadius={50} outerRadius={90} paddingAngle={2}>
-                {byLevel.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+              <Pie
+                data={byLevel}
+                dataKey="value"
+                nameKey="name"
+                innerRadius={50}
+                outerRadius={90}
+                paddingAngle={2}
+              >
+                {byLevel.map((_, i) => (
+                  <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                ))}
               </Pie>
               <Tooltip />
               <Legend />
@@ -164,7 +242,13 @@ function Dashboard() {
               <XAxis dataKey="name" stroke="#526174" fontSize={11} />
               <YAxis stroke="#526174" fontSize={11} />
               <Tooltip />
-              <Line type="monotone" dataKey="value" stroke="#155EEF" strokeWidth={2} dot={{ r: 3 }} />
+              <Line
+                type="monotone"
+                dataKey="value"
+                stroke="#155EEF"
+                strokeWidth={2}
+                dot={{ r: 3 }}
+              />
             </LineChart>
           </ResponsiveContainer>
         </ChartCard>

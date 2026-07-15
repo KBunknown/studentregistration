@@ -19,7 +19,7 @@ function Settings() {
   return (
     <AdminShell title="Settings">
       <div className="grid gap-6 lg:grid-cols-2">
-        <section className="rounded-xl border border-border bg-white p-6 shadow-card">
+        <section className="glass-panel rounded-xl p-6 shadow-card">
           <h2 className="font-heading text-base font-semibold text-primary-navy">Institution Branding</h2>
           <p className="mt-1 text-sm text-muted-foreground">Configure your institution name and logo. Leave blank to keep the neutral portal title.</p>
           <div className="mt-6 grid gap-5">
@@ -34,7 +34,7 @@ function Settings() {
           </div>
         </section>
 
-        <section className="rounded-xl border border-border bg-white p-6 shadow-card">
+        <section className="glass-panel rounded-xl p-6 shadow-card">
           <h2 className="font-heading text-base font-semibold text-primary-navy">Contact Information</h2>
           <p className="mt-1 text-sm text-muted-foreground">Displayed on public pages for student enquiries.</p>
           <div className="mt-6">
@@ -45,7 +45,7 @@ function Settings() {
           </div>
         </section>
 
-        <section className="rounded-xl border border-border bg-white p-6 shadow-card lg:col-span-2">
+        <section className="glass-panel rounded-xl p-6 shadow-card lg:col-span-2">
           <h2 className="font-heading text-base font-semibold text-primary-navy">Registration Window</h2>
           <p className="mt-1 text-sm text-muted-foreground">Open or close the public registration form. When closed, students will see a message.</p>
           <div className="mt-6 flex items-center gap-4 rounded-lg border border-border bg-muted/50 p-4">

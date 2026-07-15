@@ -19,7 +19,7 @@ function Duplicates() {
   if (dupes.length === 0) {
     return (
       <AdminShell title="Duplicate Review">
-        <div className="mt-8 rounded-xl border border-border bg-white p-12 text-center shadow-card">
+        <div className="mt-8 glass-panel rounded-xl p-12 text-center shadow-card">
           <div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-success/10 text-success"><Check className="h-8 w-8" /></div>
           <p className="mt-4 font-heading text-lg font-semibold text-foreground">No possible duplicates</p>
           <p className="mt-1 text-sm text-muted-foreground">All registrations look unique. You're all caught up.</p>
@@ -36,7 +36,7 @@ function Duplicates() {
           const other = regs.find((x) => x.id === r.duplicateOf);
           if (!other) return null;
           return (
-            <div key={r.id} className="rounded-xl border border-warning/30 bg-white p-6 shadow-card">
+            <div key={r.id} className="glass-panel rounded-xl border border-warning/30 p-6">
               <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-warning/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-warning">
                 <AlertTriangle className="h-4 w-4" /> Possible duplicate detected
               </div>

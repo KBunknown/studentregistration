@@ -29,7 +29,7 @@ function StudentProfile() {
   if (r === undefined) return <AdminShell title="Student Profile"><div className="grid gap-3">{[...Array(6)].map((_, i) => (<div key={i} className="h-24 animate-pulse rounded-xl bg-muted" />))}</div></AdminShell>;
   if (r === null) return (
     <AdminShell title="Student Profile">
-      <div className="rounded-xl border border-border bg-white p-12 text-center shadow-card">
+      <div className="glass-panel rounded-xl p-12 text-center shadow-card">
         <p className="text-lg font-semibold text-foreground">Student not found</p>
         <p className="mt-1 text-sm text-muted-foreground">The requested registration record does not exist.</p>
         <Link to="/admin/registrations" className="mt-6 inline-flex h-10 items-center justify-center rounded-md bg-primary px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-deep">Back to registrations</Link>
@@ -48,7 +48,7 @@ function StudentProfile() {
         </Link>
       </div>
 
-      <div className="mt-6 rounded-xl border border-border bg-white p-6 shadow-card sm:p-8">
+      <div className="mt-6 glass-panel rounded-xl p-6 shadow-card sm:p-8">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 sm:flex sm:items-center sm:justify-between">
           <div className="flex min-w-0 items-center gap-5">
             <span className="grid h-16 w-16 shrink-0 place-items-center rounded-full bg-primary-soft text-xl font-bold text-primary-deep shadow-sm">

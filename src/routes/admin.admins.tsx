@@ -22,7 +22,7 @@ function Admins() {
         </button>
       </div>
       
-      <div className="mt-6 overflow-hidden rounded-xl border border-border bg-white shadow-card">
+      <div className="mt-6 glass-panel overflow-hidden rounded-xl">
         <ul className="divide-y divide-border">
           {MOCK_ADMINS.map((a) => (
             <li key={a.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 p-5 sm:grid-cols-[minmax(0,1fr)_140px_120px_auto] hover:bg-muted/30 transition-colors">

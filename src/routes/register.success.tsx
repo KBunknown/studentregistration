@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { CheckCircle2, Printer } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { PublicShell } from "@/components/public-shell";
 import { useI18n } from "@/lib/i18n";
 import type { Registration } from "@/lib/mock-data";
@@ -16,46 +16,29 @@ function Success() {
   const { t } = useI18n();
   const [r, setR] = useState<Registration | null>(null);
   useEffect(() => {
-    const raw =
-      typeof window !== "undefined"
-        ? localStorage.getItem("isrp_last_submission")
-        : null;
+    const raw = typeof window !== "undefined" ? localStorage.getItem("isrp_last_submission") : null;
     if (raw) setR(JSON.parse(raw));
   }, []);
 
   return (
     <PublicShell>
-      <div className="mx-auto max-w-2xl px-4 py-14 sm:px-6 lg:px-8">
-        {/* Success hero */}
-        <div className="flex flex-col items-center text-center">
-          <div className="grid h-16 w-16 place-items-center rounded-full bg-success/10">
-            <CheckCircle2 className="h-9 w-9 text-success" />
+      <div className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center px-4 py-8 sm:px-5">
+        <div className="glass-panel w-full max-w-lg rounded-xl p-6 sm:p-8">
+          <div className="flex flex-col items-center text-center">
+            <div className="grid h-16 w-16 place-items-center rounded-full bg-success/10 ring-4 ring-success/5">
+              <CheckCircle2 className="h-9 w-9 text-success" strokeWidth={1.75} />
+            </div>
+            <h1 className="mt-5 font-heading text-2xl font-bold text-foreground sm:text-[1.65rem]">
+              {t("success_title")}
+            </h1>
           </div>
-          <h1 className="mt-5 font-heading text-2xl font-bold text-foreground sm:text-3xl">
-            {t("success_title")}
-          </h1>
-          <p className="mt-2 max-w-md text-sm text-muted-foreground">
-            {t("success_sub")}
-          </p>
-        </div>
 
-        {/* Summary card */}
-        <div className="mt-8 rounded-lg border border-border bg-white shadow-card">
-          <div className="border-b border-border px-5 py-3">
-            <h3 className="font-heading text-sm font-semibold text-primary-deep">
-              Registration Summary
-            </h3>
-          </div>
-          <dl className="divide-y divide-border">
+          <dl className="mt-8 divide-y divide-primary/10 rounded-lg border border-primary/10 bg-white/50">
             <Row label={t("f_fullname")} value={r?.fullName} />
             <Row label={t("f_index")} value={r?.index} />
             <Row
               label={t("f_program")}
-              value={
-                r?.program === "Other Program"
-                  ? `${r?.otherProgram} (Other)`
-                  : r?.program
-              }
+              value={r?.program === "Other Program" ? `${r?.otherProgram} (Other)` : r?.program}
             />
             <Row label={t("f_level")} value={r?.level} />
             <Row label={t("f_grad_year")} value={r?.graduationYear} />
@@ -64,23 +47,12 @@ function Success() {
               value={r ? new Date(r.registrationDate).toLocaleString() : ""}
             />
           </dl>
-        </div>
 
-        {/* Actions */}
-        <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
-          <Link
-            to="/register"
-            className="inline-flex items-center justify-center rounded-lg border border-border bg-white px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-          >
-            {t("btn_home")}
-          </Link>
-          <button
-            onClick={() => window.print()}
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-card transition-colors hover:bg-primary-deep"
-          >
-            <Printer className="h-4 w-4" />
-            {t("btn_download")}
-          </button>
+          <div className="mt-8">
+            <Link to="/register" className="btn-primary w-full">
+              {t("nav_register")}
+            </Link>
+          </div>
         </div>
       </div>
     </PublicShell>
@@ -89,9 +61,9 @@ function Success() {
 
 function Row({ label, value }: { label: string; value?: string | number }) {
   return (
-    <div className="grid grid-cols-[1fr_1.5fr] items-center gap-3 px-5 py-3">
+    <div className="grid grid-cols-[1fr_1.2fr] items-center gap-3 px-5 py-3.5">
       <dt className="text-sm text-muted-foreground">{label}</dt>
-      <dd className="min-w-0 truncate text-sm font-medium text-foreground text-right sm:text-left">
+      <dd className="min-w-0 truncate text-right text-sm font-medium text-foreground">
         {value || "—"}
       </dd>
     </div>

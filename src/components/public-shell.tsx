@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { Menu, X } from "lucide-react";
-import { useState, type ReactNode } from "react";
 import { useI18n, type Lang } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import { PremiumBackground } from "@/components/premium-background";
+import type { ReactNode } from "react";
 
 function LangSelector() {
   const { lang, setLang } = useI18n();
@@ -11,10 +11,10 @@ function LangSelector() {
       type="button"
       onClick={() => setLang(v)}
       className={cn(
-        "px-2.5 py-1 text-xs font-semibold tracking-wider transition-colors rounded-md",
+        "px-2.5 py-1 text-xs font-semibold tracking-wider transition-colors rounded-md min-h-[28px]",
         lang === v
           ? "bg-primary text-primary-foreground"
-          : "text-muted-foreground hover:text-foreground hover:bg-muted",
+          : "text-muted-foreground hover:text-foreground hover:bg-white/60",
       )}
       aria-pressed={lang === v}
     >
@@ -22,7 +22,7 @@ function LangSelector() {
     </button>
   );
   return (
-    <div className="inline-flex items-center gap-0.5 rounded-lg border border-border bg-white p-0.5">
+    <div className="inline-flex items-center gap-0.5 rounded-lg border border-white/60 bg-white/50 p-0.5 backdrop-blur-sm">
       <Btn v="en" label="EN" />
       <Btn v="fr" label="FR" />
     </div>
@@ -31,111 +31,27 @@ function LangSelector() {
 
 export function PublicShell({ children }: { children: ReactNode }) {
   const { t } = useI18n();
-  const [open, setOpen] = useState(false);
+
   return (
-    <div className="min-h-screen flex flex-col bg-transparent">
-      {/* Slim top header */}
-      <header className="sticky top-0 z-30 border-b border-white/50 bg-white/60 backdrop-blur-md shadow-sm">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-14 items-center justify-between gap-3">
-            <Link to="/register" className="flex min-w-0 items-center gap-2">
-              <img src="/logo.png" alt="Logo" className="h-8 w-8 object-contain" />
-              <span className="font-heading text-[15px] font-bold tracking-tight text-primary-navy sm:text-base">
-                International Student Registration
-              </span>
-            </Link>
-            <div className="hidden items-center gap-1 md:flex">
-              <nav className="flex items-center gap-0.5 text-sm">
-                <Link
-                  to="/register"
-                  className="rounded-lg px-3 py-2 font-medium text-muted-foreground transition-colors hover:bg-primary-soft hover:text-primary"
-                  activeProps={{ className: "!bg-primary-soft !text-primary" }}
-                >
-                  {t("nav_register")}
-                </Link>
-                <Link
-                  to="/register/already"
-                  className="rounded-lg px-3 py-2 font-medium text-muted-foreground transition-colors hover:bg-primary-soft hover:text-primary"
-                  activeProps={{ className: "!bg-primary-soft !text-primary" }}
-                >
-                  {t("nav_already")}
-                </Link>
-                <Link
-                  to="/privacy"
-                  className="rounded-lg px-3 py-2 font-medium text-muted-foreground transition-colors hover:bg-primary-soft hover:text-primary"
-                  activeProps={{ className: "!bg-primary-soft !text-primary" }}
-                >
-                  {t("nav_privacy")}
-                </Link>
-              </nav>
-              <div className="ml-2">
-                <LangSelector />
-              </div>
-            </div>
-            <div className="flex items-center gap-2 md:hidden">
-              <LangSelector />
-              <button
-                type="button"
-                aria-label="Menu"
-                onClick={() => setOpen((o) => !o)}
-                className="grid h-9 w-9 place-items-center rounded-lg border border-border text-foreground transition-colors hover:bg-muted"
-              >
-                {open ? (
-                  <X className="h-4 w-4" />
-                ) : (
-                  <Menu className="h-4 w-4" />
-                )}
-              </button>
-            </div>
-          </div>
-          {/* Mobile menu */}
-          {open && (
-            <nav className="grid gap-1 pb-3 md:hidden border-t border-border pt-2">
-              <Link
-                to="/register"
-                onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-2.5 text-sm font-medium text-foreground hover:bg-primary-soft hover:text-primary"
-              >
-                {t("nav_register")}
-              </Link>
-              <Link
-                to="/register/already"
-                onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-2.5 text-sm font-medium text-foreground hover:bg-primary-soft hover:text-primary"
-              >
-                {t("nav_already")}
-              </Link>
-              <Link
-                to="/privacy"
-                onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-2.5 text-sm font-medium text-foreground hover:bg-primary-soft hover:text-primary"
-              >
-                {t("nav_privacy")}
-              </Link>
-            </nav>
-          )}
+    <PremiumBackground className="flex min-h-screen flex-col">
+      <header className="glass-header sticky top-0 z-30">
+        <div className="mx-auto flex h-14 max-w-[1600px] items-center justify-between gap-3 px-4 sm:px-5 lg:px-8">
+          <Link to="/register" className="flex min-w-0 items-center gap-2.5">
+            <img src="/logo.png" alt="Logo" className="h-9 w-9 shrink-0 object-contain" />
+            <img
+              src="/favicon.png"
+              alt=""
+              aria-hidden
+              className="h-5 w-5 shrink-0 object-contain opacity-80"
+            />
+            <span className="font-heading truncate text-sm font-bold tracking-tight text-primary-navy sm:text-[15px]">
+              {t("portal_title")}
+            </span>
+          </Link>
+          <LangSelector />
         </div>
       </header>
-      <main className="flex-1">{children}</main>
-      <footer className="border-t border-white/50 bg-white/40 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-5xl flex-col items-start justify-between gap-3 px-4 py-5 text-xs text-muted-foreground sm:flex-row sm:items-center sm:px-6 lg:px-8">
-          <p>© {new Date().getFullYear()} International Student Registration</p>
-          <div className="flex items-center gap-4">
-            <Link
-              to="/privacy"
-              className="hover:text-foreground transition-colors"
-            >
-              {t("nav_privacy")}
-            </Link>
-            <Link
-              to="/admin/login"
-              className="hover:text-foreground transition-colors"
-            >
-              {t("nav_admin")}
-            </Link>
-          </div>
-        </div>
-      </footer>
-    </div>
+      <main className="flex min-h-0 flex-1 flex-col">{children}</main>
+    </PremiumBackground>
   );
 }
