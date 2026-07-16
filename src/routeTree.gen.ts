@@ -17,6 +17,7 @@ import { Route as RegisterIndexRouteImport } from './routes/register.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as RegisterSuccessRouteImport } from './routes/register.success'
 import { Route as RegisterReviewRouteImport } from './routes/register.review'
+import { Route as RegisterFormRouteImport } from './routes/register.form'
 import { Route as RegisterAlreadyRouteImport } from './routes/register.already'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminRegistrationsRouteImport } from './routes/admin.registrations'
@@ -68,6 +69,11 @@ const RegisterSuccessRoute = RegisterSuccessRouteImport.update({
 const RegisterReviewRoute = RegisterReviewRouteImport.update({
   id: '/review',
   path: '/review',
+  getParentRoute: () => RegisterRoute,
+} as any)
+const RegisterFormRoute = RegisterFormRouteImport.update({
+  id: '/form',
+  path: '/form',
   getParentRoute: () => RegisterRoute,
 } as any)
 const RegisterAlreadyRoute = RegisterAlreadyRouteImport.update({
@@ -146,6 +152,7 @@ export interface FileRoutesByFullPath {
   '/admin/registrations': typeof AdminRegistrationsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/register/already': typeof RegisterAlreadyRoute
+  '/register/form': typeof RegisterFormRoute
   '/register/review': typeof RegisterReviewRoute
   '/register/success': typeof RegisterSuccessRoute
   '/admin/': typeof AdminIndexRoute
@@ -166,6 +173,7 @@ export interface FileRoutesByTo {
   '/admin/registrations': typeof AdminRegistrationsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/register/already': typeof RegisterAlreadyRoute
+  '/register/form': typeof RegisterFormRoute
   '/register/review': typeof RegisterReviewRoute
   '/register/success': typeof RegisterSuccessRoute
   '/admin': typeof AdminIndexRoute
@@ -189,6 +197,7 @@ export interface FileRoutesById {
   '/admin/registrations': typeof AdminRegistrationsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/register/already': typeof RegisterAlreadyRoute
+  '/register/form': typeof RegisterFormRoute
   '/register/review': typeof RegisterReviewRoute
   '/register/success': typeof RegisterSuccessRoute
   '/admin/': typeof AdminIndexRoute
@@ -213,6 +222,7 @@ export interface FileRouteTypes {
     | '/admin/registrations'
     | '/admin/settings'
     | '/register/already'
+    | '/register/form'
     | '/register/review'
     | '/register/success'
     | '/admin/'
@@ -233,6 +243,7 @@ export interface FileRouteTypes {
     | '/admin/registrations'
     | '/admin/settings'
     | '/register/already'
+    | '/register/form'
     | '/register/review'
     | '/register/success'
     | '/admin'
@@ -255,6 +266,7 @@ export interface FileRouteTypes {
     | '/admin/registrations'
     | '/admin/settings'
     | '/register/already'
+    | '/register/form'
     | '/register/review'
     | '/register/success'
     | '/admin/'
@@ -326,6 +338,13 @@ declare module '@tanstack/react-router' {
       path: '/review'
       fullPath: '/register/review'
       preLoaderRoute: typeof RegisterReviewRouteImport
+      parentRoute: typeof RegisterRoute
+    }
+    '/register/form': {
+      id: '/register/form'
+      path: '/form'
+      fullPath: '/register/form'
+      preLoaderRoute: typeof RegisterFormRouteImport
       parentRoute: typeof RegisterRoute
     }
     '/register/already': {
@@ -459,6 +478,7 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface RegisterRouteChildren {
   RegisterAlreadyRoute: typeof RegisterAlreadyRoute
+  RegisterFormRoute: typeof RegisterFormRoute
   RegisterReviewRoute: typeof RegisterReviewRoute
   RegisterSuccessRoute: typeof RegisterSuccessRoute
   RegisterIndexRoute: typeof RegisterIndexRoute
@@ -466,6 +486,7 @@ interface RegisterRouteChildren {
 
 const RegisterRouteChildren: RegisterRouteChildren = {
   RegisterAlreadyRoute: RegisterAlreadyRoute,
+  RegisterFormRoute: RegisterFormRoute,
   RegisterReviewRoute: RegisterReviewRoute,
   RegisterSuccessRoute: RegisterSuccessRoute,
   RegisterIndexRoute: RegisterIndexRoute,

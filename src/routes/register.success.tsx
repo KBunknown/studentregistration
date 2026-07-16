@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { CheckCircle2 } from "lucide-react";
-import { PublicShell } from "@/components/public-shell";
 import { useI18n } from "@/lib/i18n";
 import type { Registration } from "@/lib/mock-data";
 
@@ -21,9 +20,24 @@ function Success() {
   }, []);
 
   return (
-    <PublicShell>
-      <div className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center px-4 py-8 sm:px-5">
-        <div className="glass-panel w-full max-w-lg rounded-xl p-6 sm:p-8">
+    <div className="mesh-gradient-bg relative min-h-screen">
+      <header className="sticky top-0 z-30 border-b border-white/20 bg-white/70 backdrop-blur-xl">
+        <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between gap-3 px-4 sm:px-5 lg:px-8">
+          <Link to="/register" className="flex min-w-0 items-center gap-2.5">
+            <img
+              src="/logo.png"
+              alt="International Student Registration logo"
+              className="h-9 w-9 shrink-0 object-contain"
+            />
+            <span className="font-heading truncate text-sm font-bold tracking-tight text-primary-navy sm:text-[15px]">
+              {t("portal_title")}
+            </span>
+          </Link>
+        </div>
+      </header>
+
+      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-8 sm:px-5">
+        <div className="w-full max-w-lg rounded-xl border border-white/30 bg-white/75 p-6 shadow-[0_24px_70px_rgba(21,94,239,0.08)] backdrop-blur-2xl sm:p-8">
           <div className="flex flex-col items-center text-center">
             <div className="grid h-16 w-16 place-items-center rounded-full bg-success/10 ring-4 ring-success/5">
               <CheckCircle2 className="h-9 w-9 text-success" strokeWidth={1.75} />
@@ -55,7 +69,7 @@ function Success() {
           </div>
         </div>
       </div>
-    </PublicShell>
+    </div>
   );
 }
 

@@ -6,7 +6,15 @@ import { cn } from "@/lib/utils";
 import { PremiumBackground } from "@/components/premium-background";
 
 export const Route = createFileRoute("/admin/login")({
-  head: () => ({ meta: [{ title: "Super Admin login" }] }),
+  head: () => ({
+    meta: [
+      { title: "Admin login | International Student Registration" },
+      {
+        name: "description",
+        content: "Admin login for International Student Registration.",
+      },
+    ],
+  }),
   component: Login,
 });
 
@@ -44,12 +52,18 @@ function Login() {
       <div className="w-full max-w-lg">
         <div className="glass-panel rounded-xl p-6 sm:p-8 lg:p-10">
           <div className="mb-8 flex flex-col items-center text-center">
-            <span className="grid h-12 w-12 place-items-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-              <ShieldCheck className="h-6 w-6" />
-            </span>
+            <img
+              src="/logo.png"
+              alt="International Student Registration logo"
+              className="h-16 w-16 object-contain"
+            />
             <h1 className="mt-5 font-heading text-2xl font-bold text-primary-navy">
-              Super Admin login
+              International Student Registration
             </h1>
+            <p className="mt-2 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground">
+              <ShieldCheck className="h-4 w-4 text-primary" />
+              Admin login
+            </p>
           </div>
 
           <button
@@ -130,9 +144,9 @@ function Login() {
           </form>
         </div>
 
-        <p className="mt-6 text-center text-sm text-white/80">
-          <Link to="/register" className="transition-colors hover:text-white">
-            ← Back to registration portal
+        <p className="mt-6 text-center text-sm text-muted-foreground">
+          <Link to="/register" className="font-medium transition-colors hover:text-primary-deep">
+            Back to International Student Registration
           </Link>
         </p>
       </div>

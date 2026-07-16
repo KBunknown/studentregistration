@@ -6,13 +6,25 @@ import {
   Download,
   UserPlus,
   X,
-  ChevronDown,
   MoreHorizontal,
   Eye,
   Pencil,
   GraduationCap,
 } from "lucide-react";
 import { AdminShell } from "@/components/admin-shell";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { getAllRegistrations } from "@/lib/reg-store";
 import { COUNTRIES, LEVELS, PROGRAMS, type Registration } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
@@ -45,6 +57,38 @@ function StatusBadge({ graduated }: { graduated: boolean }) {
     >
       {graduated ? "Graduated" : "Active"}
     </span>
+  );
+}
+
+function PremiumSelect({
+  value,
+  onChange,
+  options,
+  placeholder = "All",
+  className,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  options: { value: string; label: string }[];
+  placeholder?: string;
+  className?: string;
+}) {
+  const normalizedValue = value || "__all";
+  const normalizedOptions =
+    placeholder === "All" ? [{ value: "__all", label: "All" }, ...options] : options;
+  return (
+    <Select value={normalizedValue} onValueChange={(v) => onChange(v === "__all" ? "" : v)}>
+      <SelectTrigger className={cn("h-10", className)}>
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+      <SelectContent>
+        {normalizedOptions.map((o) => (
+          <SelectItem key={o.value} value={o.value}>
+            {o.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 }
 
@@ -137,7 +181,7 @@ function RegistrationsPage() {
           <button
             onClick={() => setShowFilters((s) => !s)}
             className={cn(
-              "inline-flex items-center gap-2 rounded-md border border-primary/15 bg-white/80 px-3 h-10 text-sm font-medium backdrop-blur-sm transition-colors hover:bg-primary-soft/60",
+              "inline-flex h-10 items-center gap-2 rounded-xl border border-blue-100 bg-white/80 px-3 text-sm font-medium shadow-sm backdrop-blur-xl transition-colors hover:bg-blue-50",
               activeFilterCount > 0 && "border-primary text-primary-deep",
             )}
           >
@@ -148,33 +192,32 @@ function RegistrationsPage() {
               </span>
             )}
           </button>
-          <div className="relative">
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value as SortKey)}
-              className="form-input appearance-none pl-3 pr-9 h-10 font-medium"
-            >
-              <option value="newest">Newest</option>
-              <option value="oldest">Oldest</option>
-              <option value="name_asc">Name A–Z</option>
-              <option value="name_desc">Name Z–A</option>
-              <option value="program">Program</option>
-              <option value="level">Level</option>
-              <option value="grad_year">Expected graduation year</option>
-              <option value="country">Country</option>
-              <option value="graduation_status">Graduation status</option>
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          </div>
+          <PremiumSelect
+            value={sort}
+            onChange={(v) => setSort(v as SortKey)}
+            placeholder="Sort"
+            className="w-[15rem] font-medium"
+            options={[
+              { value: "newest", label: "Newest" },
+              { value: "oldest", label: "Oldest" },
+              { value: "name_asc", label: "Name A-Z" },
+              { value: "name_desc", label: "Name Z-A" },
+              { value: "program", label: "Program" },
+              { value: "level", label: "Level" },
+              { value: "grad_year", label: "Expected graduation year" },
+              { value: "country", label: "Country" },
+              { value: "graduation_status", label: "Graduation status" },
+            ]}
+          />
           <button
             onClick={() => setShowExport(true)}
-            className="inline-flex items-center gap-2 rounded-md border border-primary/15 bg-white/80 px-3 h-10 text-sm font-medium backdrop-blur-sm transition-colors hover:bg-primary-soft/60"
+            className="inline-flex h-10 items-center gap-2 rounded-xl border border-blue-100 bg-white/80 px-3 text-sm font-medium shadow-sm backdrop-blur-xl transition-colors hover:bg-blue-50"
           >
             <Download className="h-4 w-4" /> Export
           </button>
           <button
             onClick={() => setShowInvite(true)}
-            className="inline-flex items-center gap-2 rounded-md bg-primary px-4 h-10 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-deep hidden sm:inline-flex"
+            className="hidden h-10 items-center gap-2 rounded-xl bg-primary px-4 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-deep sm:inline-flex"
           >
             <UserPlus className="h-4 w-4" /> Invite admin
           </button>
@@ -319,24 +362,31 @@ function RegistrationsPage() {
                       {new Date(r.registrationDate).toLocaleDateString()}
                     </Td>
                     <Td className="text-right">
-                      <div className="inline-flex gap-1">
-                        <Link
-                          to="/admin/students/$id"
-                          params={{ id: r.id }}
-                          className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-primary-soft hover:text-primary"
-                          aria-label="View"
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Link>
-                        <Link
-                          to="/admin/students/$id/edit"
-                          params={{ id: r.id }}
-                          className="grid h-8 w-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-primary-soft hover:text-primary"
-                          aria-label="Edit"
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Link>
-                      </div>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button
+                            type="button"
+                            className="inline-grid h-9 w-9 place-items-center rounded-xl border border-blue-100 bg-white/80 text-muted-foreground shadow-sm backdrop-blur-xl transition-colors hover:bg-blue-50 hover:text-primary"
+                            aria-label="Open registration actions"
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-44">
+                          <DropdownMenuItem asChild>
+                            <Link to="/admin/students/$id" params={{ id: r.id }}>
+                              <Eye className="h-4 w-4" />
+                              View profile
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <Link to="/admin/students/$id/edit" params={{ id: r.id }}>
+                              <Pencil className="h-4 w-4" />
+                              Edit profile
+                            </Link>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </Td>
                   </tr>
                 ))
@@ -452,21 +502,11 @@ function FilterSelect({
   return (
     <div className="grid gap-1.5">
       <label className="text-sm font-medium text-foreground">{label}</label>
-      <div className="relative">
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="form-input w-full appearance-none pl-3 pr-9 h-10"
-        >
-          <option value="">All</option>
-          {options.map((o) => (
-            <option key={o} value={o}>
-              {o}
-            </option>
-          ))}
-        </select>
-        <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-      </div>
+      <PremiumSelect
+        value={value}
+        onChange={onChange}
+        options={options.map((o) => ({ value: o, label: o }))}
+      />
     </div>
   );
 }

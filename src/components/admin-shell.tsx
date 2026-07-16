@@ -76,7 +76,7 @@ export function AdminShell({ children, title }: { children: ReactNode; title: st
                   to={n.to}
                   onClick={() => setOpen(false)}
                   className={cn(
-                    "relative flex items-center gap-3 rounded-md px-3 py-2.5 text-sm transition-colors",
+                    "relative flex min-h-11 items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors",
                     active
                       ? "bg-sidebar-accent font-medium text-white"
                       : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-white",
@@ -97,13 +97,26 @@ export function AdminShell({ children, title }: { children: ReactNode; title: st
   );
 
   const SidebarHeader = (
-    <div className="flex h-14 items-center gap-2.5 px-4">
+    <div className="flex min-h-16 items-center gap-3 px-4">
       <img
         src="/logo.png"
-        alt="Logo"
-        className="h-8 w-8 rounded-full bg-white/10 object-contain p-0.5"
+        alt="International Student Registration logo"
+        className="h-10 w-10 rounded-xl bg-white/10 object-contain p-1"
       />
-      <span className="font-heading text-sm font-semibold text-white">Admin Console</span>
+      <div className="min-w-0">
+        <span className="block truncate font-heading text-sm font-semibold text-white">
+          International Student Registration
+        </span>
+        <span className="block text-[11px] font-medium text-sidebar-foreground/70">
+          Admin Console
+        </span>
+      </div>
+    </div>
+  );
+
+  const PartnerEmblem = (
+    <div className="mx-3 mb-3 rounded-xl border border-white/10 bg-white/5 px-3 py-3">
+      <img src="/emblem.png" alt="Partner emblem" className="h-9 w-9 object-contain opacity-75" />
     </div>
   );
 
@@ -124,9 +137,10 @@ export function AdminShell({ children, title }: { children: ReactNode; title: st
   return (
     <PremiumBackground className="min-h-screen">
       <div className="flex min-h-screen">
-        <aside className="hidden w-64 shrink-0 flex-col bg-primary-navy lg:flex">
+        <aside className="hidden w-72 shrink-0 flex-col bg-primary-navy lg:flex">
           {SidebarHeader}
           <div className="flex-1 overflow-y-auto">{SideNav}</div>
+          {PartnerEmblem}
           {LogoutButton}
         </aside>
 
@@ -141,9 +155,14 @@ export function AdminShell({ children, title }: { children: ReactNode; title: st
               >
                 <Menu className="h-4 w-4" />
               </button>
-              <h1 className="truncate font-heading text-lg font-semibold text-foreground">
-                {title}
-              </h1>
+              <div className="min-w-0">
+                <p className="truncate text-[11px] font-semibold uppercase tracking-wider text-primary-deep/70">
+                  International Student Registration
+                </p>
+                <h1 className="truncate font-heading text-lg font-semibold text-foreground">
+                  {title}
+                </h1>
+              </div>
             </div>
             <div className="flex items-center gap-3">
               <div className="hidden text-right sm:block">
@@ -180,13 +199,18 @@ export function AdminShell({ children, title }: { children: ReactNode; title: st
           )}
         >
           <div className="flex h-14 items-center justify-between px-4">
-            <div className="flex items-center gap-2.5">
+            <div className="flex min-w-0 items-center gap-2.5">
               <img
                 src="/logo.png"
-                alt="Logo"
-                className="h-8 w-8 rounded-full bg-white/10 object-contain p-0.5"
+                alt="International Student Registration logo"
+                className="h-9 w-9 rounded-xl bg-white/10 object-contain p-1"
               />
-              <span className="font-heading text-sm font-semibold text-white">Admin Console</span>
+              <div className="min-w-0">
+                <span className="block truncate font-heading text-sm font-semibold text-white">
+                  International Student Registration
+                </span>
+                <span className="block text-[11px] text-sidebar-foreground/70">Admin Console</span>
+              </div>
             </div>
             <button
               onClick={() => setOpen(false)}
@@ -197,6 +221,7 @@ export function AdminShell({ children, title }: { children: ReactNode; title: st
             </button>
           </div>
           <div className="flex-1 overflow-y-auto">{SideNav}</div>
+          {PartnerEmblem}
           {LogoutButton}
         </div>
       </div>

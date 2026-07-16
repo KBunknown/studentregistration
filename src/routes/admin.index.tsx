@@ -31,6 +31,15 @@ import { getAllRegistrations } from "@/lib/reg-store";
 import type { Registration } from "@/lib/mock-data";
 
 export const Route = createFileRoute("/admin/")({
+  head: () => ({
+    meta: [
+      { title: "Admin dashboard | International Student Registration" },
+      {
+        name: "description",
+        content: "Admin dashboard for International Student Registration.",
+      },
+    ],
+  }),
   component: Dashboard,
 });
 

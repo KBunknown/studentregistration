@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Search } from "lucide-react";
-import { PublicShell } from "@/components/public-shell";
 import { useI18n } from "@/lib/i18n";
 import { getAllRegistrations } from "@/lib/reg-store";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import type { Registration } from "@/lib/mock-data";
 
 export const Route = createFileRoute("/register/already")({
@@ -16,26 +16,84 @@ function Already() {
   const [index, setIndex] = useState("");
   const [email, setEmail] = useState("");
   const [result, setResult] = useState<Registration | null | "none">(null);
+  const [searching, setSearching] = useState(false);
 
-  const lookup = (e: React.FormEvent) => {
+  const lookup = async (e: React.FormEvent) => {
     e.preventDefault();
-    const match = getAllRegistrations().find(
-      (r) => r.index === index.trim() && r.email.toLowerCase() === email.trim().toLowerCase(),
-    );
-    setResult(match ?? "none");
+    setSearching(true);
+    setResult(null);
+
+    try {
+      if (isSupabaseConfigured && supabase) {
+        const { data, error } = await supabase
+          .from("students")
+          .select("*")
+          .eq("index_number", index.trim())
+          .eq("email", email.trim().toLowerCase())
+          .single();
+
+        if (error || !data) {
+          setResult("none");
+        } else {
+          setResult({
+            id: data.id,
+            fullName: data.full_name,
+            email: data.email,
+            gender: data.gender,
+            country: data.country,
+            phoneCode: data.phone_code,
+            phone: data.phone,
+            whatsappCode: data.whatsapp_code,
+            whatsapp: data.whatsapp,
+            sameWhatsapp: data.same_whatsapp,
+            program: data.program,
+            otherProgram: data.other_program,
+            index: data.index_number,
+            level: data.level,
+            graduationYear: data.graduation_year,
+            graduated: data.graduated,
+            registrationDate: data.registration_date,
+          });
+        }
+      } else {
+        const match = getAllRegistrations().find(
+          (r) => r.index === index.trim() && r.email.toLowerCase() === email.trim().toLowerCase(),
+        );
+        setResult(match ?? "none");
+      }
+    } catch {
+      setResult("none");
+    } finally {
+      setSearching(false);
+    }
   };
 
   return (
-    <PublicShell>
+    <div className="mesh-gradient-bg relative min-h-screen">
+      <header className="sticky top-0 z-30 border-b border-white/20 bg-white/70 backdrop-blur-xl">
+        <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between gap-3 px-4 sm:px-5 lg:px-8">
+          <Link to="/register" className="flex min-w-0 items-center gap-2.5">
+            <img
+              src="/logo.png"
+              alt="International Student Registration logo"
+              className="h-9 w-9 shrink-0 object-contain"
+            />
+            <span className="font-heading truncate text-sm font-bold tracking-tight text-primary-navy sm:text-[15px]">
+              {t("portal_title")}
+            </span>
+          </Link>
+        </div>
+      </header>
+
       <div className="mx-auto max-w-xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="mb-8 text-center">
-          <h1 className="font-heading text-2xl font-bold text-white drop-shadow-sm sm:text-3xl">
+          <h1 className="font-heading text-2xl font-bold text-primary-navy sm:text-3xl">
             {t("already_title")}
           </h1>
-          <p className="mt-2 text-sm text-white/85">{t("already_sub")}</p>
+          <p className="mt-2 text-sm text-slate-600">{t("already_sub")}</p>
         </div>
 
-        <form onSubmit={lookup} className="glass-panel grid gap-5 rounded-xl p-6 sm:p-8">
+        <form onSubmit={lookup} className="grid gap-5 rounded-xl border border-white/30 bg-white/75 p-6 shadow-[0_24px_70px_rgba(21,94,239,0.08)] backdrop-blur-2xl sm:p-8">
           <label className="grid gap-1.5">
             <span className="text-sm font-medium text-foreground">{t("f_index")}</span>
             <input
@@ -57,8 +115,8 @@ function Already() {
               required
             />
           </label>
-          <button className="btn-primary mt-2">
-            <Search className="h-4 w-4" /> {t("already_lookup")}
+          <button className="btn-primary mt-2" disabled={searching}>
+            <Search className="h-4 w-4" /> {searching ? "Searching..." : t("already_lookup")}
           </button>
         </form>
 
@@ -68,7 +126,7 @@ function Already() {
           </div>
         )}
         {result && result !== "none" && (
-          <div className="glass-panel mt-6 overflow-hidden rounded-xl">
+          <div className="mt-6 overflow-hidden rounded-xl border border-white/30 bg-white/75 shadow-[0_24px_70px_rgba(21,94,239,0.08)] backdrop-blur-2xl">
             <div className="border-b border-primary/10 bg-success/10 px-5 py-4">
               <p className="font-heading text-sm font-semibold text-success">Registration Found</p>
             </div>
@@ -101,16 +159,16 @@ function Already() {
           </div>
         )}
 
-        <p className="mt-8 text-center text-sm text-white/80">
+        <p className="mt-8 text-center text-sm text-slate-600">
           Not registered yet?{" "}
           <Link
             to="/register"
-            className="font-medium text-white underline-offset-4 hover:underline"
+            className="font-medium text-blue-600 underline-offset-4 hover:underline"
           >
             {t("nav_register")}
           </Link>
         </p>
       </div>
-    </PublicShell>
+    </div>
   );
 }

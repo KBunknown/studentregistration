@@ -1,31 +1,39 @@
 import { Link } from "@tanstack/react-router";
 import { useI18n, type Lang } from "@/lib/i18n";
-import { cn } from "@/lib/utils";
 import { PremiumBackground } from "@/components/premium-background";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown, Languages } from "lucide-react";
 import type { ReactNode } from "react";
 
 function LangSelector() {
   const { lang, setLang } = useI18n();
-  const Btn = ({ v, label }: { v: Lang; label: string }) => (
-    <button
-      type="button"
-      onClick={() => setLang(v)}
-      className={cn(
-        "px-2.5 py-1 text-xs font-semibold tracking-wider transition-colors rounded-md min-h-[28px]",
-        lang === v
-          ? "bg-primary text-primary-foreground"
-          : "text-muted-foreground hover:text-foreground hover:bg-white/60",
-      )}
-      aria-pressed={lang === v}
-    >
-      {label}
-    </button>
-  );
   return (
-    <div className="inline-flex items-center gap-0.5 rounded-lg border border-white/60 bg-white/50 p-0.5 backdrop-blur-sm">
-      <Btn v="en" label="EN" />
-      <Btn v="fr" label="FR" />
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="outline"
+          className="h-11 rounded-xl border-blue-100 bg-white/80 px-3 shadow-sm backdrop-blur-xl hover:bg-blue-50 focus-visible:ring-2 focus-visible:ring-blue-500/20"
+        >
+          <Languages className="mr-2 h-4 w-4 text-blue-600" />
+          <span>{lang === "en" ? "EN  English" : "FR  Français"}</span>
+          <ChevronDown className="ml-2 h-4 w-4 text-slate-500" />
+        </Button>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent align="end" className="w-52">
+        <DropdownMenuRadioGroup value={lang} onValueChange={(v) => setLang(v as Lang)}>
+          <DropdownMenuRadioItem value="en">EN&nbsp;&nbsp;English</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="fr">FR&nbsp;&nbsp;Français</DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
@@ -35,14 +43,12 @@ export function PublicShell({ children }: { children: ReactNode }) {
   return (
     <PremiumBackground className="flex min-h-screen flex-col">
       <header className="glass-header sticky top-0 z-30">
-        <div className="mx-auto flex h-14 max-w-[1600px] items-center justify-between gap-3 px-4 sm:px-5 lg:px-8">
+        <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between gap-3 px-4 sm:px-5 lg:px-8">
           <Link to="/register" className="flex min-w-0 items-center gap-2.5">
-            <img src="/logo.png" alt="Logo" className="h-9 w-9 shrink-0 object-contain" />
             <img
-              src="/favicon.png"
-              alt=""
-              aria-hidden
-              className="h-5 w-5 shrink-0 object-contain opacity-80"
+              src="/logo.png"
+              alt="International Student Registration logo"
+              className="h-10 w-10 shrink-0 object-contain"
             />
             <span className="font-heading truncate text-sm font-bold tracking-tight text-primary-navy sm:text-[15px]">
               {t("portal_title")}
@@ -52,6 +58,16 @@ export function PublicShell({ children }: { children: ReactNode }) {
         </div>
       </header>
       <main className="flex min-h-0 flex-1 flex-col">{children}</main>
+      <footer className="px-4 pb-6 sm:px-5 lg:px-8">
+        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 border-t border-blue-100/70 pt-4 text-xs text-slate-500">
+          <span className="font-medium">{t("portal_title")}</span>
+          <img
+            src="/emblem.png"
+            alt="Partner emblem"
+            className="h-8 w-8 shrink-0 object-contain opacity-75"
+          />
+        </div>
+      </footer>
     </PremiumBackground>
   );
 }

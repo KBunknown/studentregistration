@@ -55,6 +55,32 @@ export const COUNTRIES = [
   { name: "Rwanda", code: "+250" },
 ];
 
+export const COUNTRY_DIGITS: Record<string, number> = {
+  "+233": 9,  // Ghana
+  "+234": 10, // Nigeria
+  "+27": 9,   // South Africa
+  "+254": 9,  // Kenya
+  "+44": 10,  // United Kingdom
+  "+1": 10,   // US / Canada
+  "+33": 9,   // France
+  "+49": 10,  // Germany
+  "+86": 11,  // China
+  "+91": 10,  // India
+  "+55": 11,  // Brazil
+  "+20": 10,  // Egypt
+  "+237": 9,  // Cameroon
+  "+225": 10, // Côte d'Ivoire
+  "+221": 9,  // Senegal
+  "+212": 9,  // Morocco
+  "+255": 9,  // Tanzania
+  "+256": 9,  // Uganda
+  "+250": 9,  // Rwanda
+};
+
+export function maxDigitsForCode(code: string): number {
+  return COUNTRY_DIGITS[code] ?? 10;
+}
+
 export const CURRENT_YEAR = 2026;
 
 export function graduationYearFor(level: Level | ""): number | "" {
