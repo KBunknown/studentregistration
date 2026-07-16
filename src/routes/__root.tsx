@@ -17,6 +17,11 @@ function NotFoundComponent() {
   return (
     <div className="premium-scene flex min-h-screen items-center justify-center px-4">
       <div className="premium-bg" aria-hidden="true">
+        <div className="premium-bg__gradient" />
+        <div className="premium-bg__sweep" />
+        <div className="premium-bg__metal" />
+        <div className="premium-bg__sheen" />
+        <div className="premium-bg__grain" />
         <div className="premium-bg__mesh" />
         <div className="premium-bg__wave premium-bg__wave--1" />
         <div className="premium-bg__glow premium-bg__glow--1" />
@@ -44,7 +49,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="premium-scene flex min-h-screen items-center justify-center px-4">
       <div className="premium-bg" aria-hidden="true">
+        <div className="premium-bg__gradient" />
+        <div className="premium-bg__sweep" />
+        <div className="premium-bg__metal" />
+        <div className="premium-bg__sheen" />
+        <div className="premium-bg__grain" />
         <div className="premium-bg__mesh" />
+        <div className="premium-bg__wave premium-bg__wave--1" />
         <div className="premium-bg__glow premium-bg__glow--1" />
       </div>
       <div className="glass-panel max-w-md rounded-xl p-8 text-center">

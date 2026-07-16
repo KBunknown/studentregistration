@@ -11,6 +11,11 @@ export function PremiumBackground({
   return (
     <div className={cn("premium-scene relative min-h-screen", className)}>
       <div className="premium-bg" aria-hidden="true">
+        <div className="premium-bg__gradient" />
+        <div className="premium-bg__sweep" />
+        <div className="premium-bg__metal" />
+        <div className="premium-bg__sheen" />
+        <div className="premium-bg__grain" />
         <div className="premium-bg__mesh" />
         <div className="premium-bg__wave premium-bg__wave--1" />
         <div className="premium-bg__wave premium-bg__wave--2" />

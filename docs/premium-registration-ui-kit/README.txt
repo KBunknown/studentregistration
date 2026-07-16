@@ -1,0 +1,1 @@
+Upload or place both logo images in the project, then give ai-agent-prompt.txt to the coding agent. design-tokens.css contains the recommended colour and glass-surface values. asset-usage.txt explains where each image belongs.

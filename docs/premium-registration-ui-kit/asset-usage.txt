@@ -1,0 +1,11 @@
+MAIN LOGO: assets/main-blue-logo.png
+Use in the registration header and admin login/sidebar identity area. Keep it crisp and moderate in size. Do not stretch, recolour or place it over a busy background.
+
+SECONDARY EMBLEM: assets/secondary-partner-emblem.png
+Use only as a smaller supporting mark in a partner strip, footer note, About panel or admin Settings/About section. It must never compete visually with the main logo.
+
+BACKGROUND DESCRIPTION:
+Layered pale-blue radial gradients, flowing translucent mesh waves, subtle dot-grid accents, low-opacity blurred blue shapes and broad clean white negative space. The background should add depth without reducing readability.
+
+GLASS SURFACE DESCRIPTION:
+Frosted white panel with rgba(255,255,255,0.72–0.82), backdrop-filter blur(18px–24px), 1px translucent white border, soft inner highlight and restrained navy-blue shadow. Keep inputs slightly more opaque than the containing panel.
