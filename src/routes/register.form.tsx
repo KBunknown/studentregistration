@@ -275,7 +275,6 @@ function PhoneRow({
         disabled={disabled}
         onChange={(e) => {
           onCode(e.target.value);
-          onNumber("");
         }}
         className={cn(inputCls, "w-28 shrink-0", error && "border-destructive")}
       >

@@ -41,18 +41,23 @@ function LandingPage() {
           <div className="w-full max-w-2xl">
             <div className="rounded-3xl border border-white/10 bg-white/10 p-8 shadow-[0_30px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl sm:p-12 lg:p-16">
               <div className="flex flex-col items-center text-center">
-                <div className="flex items-center justify-center gap-8">
-                  <img
-                    src="/logo.png"
-                    alt="International Student Registration"
-                    className="h-36 w-36 object-contain drop-shadow-2xl"
-                  />
-                  <img
-                    src="/emblem.png"
-                    alt="Partner emblem"
-                    className="h-36 w-36 object-contain opacity-80 drop-shadow-2xl"
-                  />
-                </div>
+                  <div className="flex items-center justify-center gap-8">
+                    <div className="flex h-36 w-36 items-center justify-center overflow-hidden drop-shadow-2xl">
+                      <img
+                        src="/logo.png"
+                        alt="International Student Registration"
+                        className="max-w-none"
+                        style={{ height: "118%", width: "118%", objectFit: "cover" }}
+                      />
+                    </div>
+                    <div className="flex h-36 w-36 items-center justify-center overflow-hidden drop-shadow-2xl">
+                      <img
+                        src="/emblem.png"
+                        alt="Partner emblem"
+                        className="h-full w-full object-contain opacity-80"
+                      />
+                    </div>
+                  </div>
 
                 <h1 className="mt-8 font-heading text-3xl font-extrabold tracking-tight text-white drop-shadow-lg sm:text-4xl lg:text-5xl">
                   {t("portal_title")}
