@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Check, ChevronDown, Search, AlertCircle } from "lucide-react";
+import { Check, ChevronDown, Search, AlertCircle, Languages } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -8,7 +8,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useI18n } from "@/lib/i18n";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useI18n, type Lang } from "@/lib/i18n";
 import { COUNTRIES, LEVELS, PROGRAMS, graduationYearFor, maxDigitsForCode, type Level } from "@/lib/mock-data";
 import { getDraft, saveDraft, type Draft } from "@/lib/reg-store";
 import { cn } from "@/lib/utils";
@@ -292,6 +300,30 @@ function PhoneRow({
   );
 }
 
+function LangSelector() {
+  const { lang, setLang } = useI18n();
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="outline"
+          className="h-9 rounded-lg border-blue-100 bg-white/80 px-2.5 text-xs shadow-sm backdrop-blur-xl hover:bg-blue-50"
+        >
+          <Languages className="mr-1.5 h-3.5 w-3.5 text-blue-600" />
+          <span>{lang === "en" ? "EN" : "FR"}</span>
+          <ChevronDown className="ml-1 h-3 w-3 text-slate-500" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-36">
+        <DropdownMenuRadioGroup value={lang} onValueChange={(v) => setLang(v as Lang)}>
+          <DropdownMenuRadioItem value="en">EN&nbsp;&nbsp;English</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="fr">FR&nbsp;&nbsp;Français</DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 function RegisterForm() {
   const navigate = useNavigate();
   const { t } = useI18n();
@@ -361,12 +393,7 @@ function RegisterForm() {
             </span>
           </Link>
           <div className="flex items-center gap-2">
-            <Link
-              to="/register"
-              className="text-sm font-medium text-blue-600 underline-offset-4 hover:underline"
-            >
-              Back
-            </Link>
+            <LangSelector />
           </div>
         </div>
       </header>
