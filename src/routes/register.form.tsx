@@ -16,8 +16,9 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { isValidPhoneNumber } from "libphonenumber-js";
 import { useI18n, type Lang } from "@/lib/i18n";
-import { COUNTRIES, LEVELS, PROGRAMS, graduationYearFor, maxDigitsForCode, type Level } from "@/lib/mock-data";
+import { COUNTRIES, LEVELS, PROGRAMS, graduationYearFor, type Level } from "@/lib/mock-data";
 import { getDraft, saveDraft, type Draft } from "@/lib/reg-store";
 import { cn } from "@/lib/utils";
 
@@ -180,10 +181,22 @@ function ProgramCombo({
               value={q}
               onChange={(e) => setQ(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Escape") { e.preventDefault(); setOpen(false); }
-                if (e.key === "ArrowDown") { e.preventDefault(); setActive((i) => Math.min(i + 1, filtered.length - 1)); }
-                if (e.key === "ArrowUp") { e.preventDefault(); setActive((i) => Math.max(i - 1, 0)); }
-                if (e.key === "Enter" && filtered[active]) { e.preventDefault(); choose(filtered[active]); }
+                if (e.key === "Escape") {
+                  e.preventDefault();
+                  setOpen(false);
+                }
+                if (e.key === "ArrowDown") {
+                  e.preventDefault();
+                  setActive((i) => Math.min(i + 1, filtered.length - 1));
+                }
+                if (e.key === "ArrowUp") {
+                  e.preventDefault();
+                  setActive((i) => Math.max(i - 1, 0));
+                }
+                if (e.key === "Enter" && filtered[active]) {
+                  e.preventDefault();
+                  choose(filtered[active]);
+                }
               }}
               placeholder="Search programs"
               className="h-9 flex-1 bg-transparent text-sm outline-none"
@@ -191,7 +204,9 @@ function ProgramCombo({
           </div>
           <ul className="max-h-72 overflow-y-auto p-1.5" role="listbox">
             {filtered.length === 0 ? (
-              <li className="px-3 py-4 text-center text-xs text-muted-foreground">No programs match your search.</li>
+              <li className="px-3 py-4 text-center text-xs text-muted-foreground">
+                No programs match your search.
+              </li>
             ) : (
               filtered.map((p, i) => (
                 <li key={p}>
@@ -259,16 +274,13 @@ function PhoneRow({
   error?: string;
   codeLabel: string;
 }) {
-  const maxDigits = maxDigitsForCode(code);
-
   const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value.replace(/\D/g, "");
-    const truncated = raw.slice(0, maxDigits);
-    onNumber(truncated);
+    const raw = e.target.value.replace(/[^\d\s()-]/g, "");
+    onNumber(raw);
   };
 
   return (
-    <div className={cn("flex gap-2", disabled && "opacity-60")}>
+    <div className={cn("flex w-full gap-2", disabled && "opacity-60")}>
       <select
         aria-label={codeLabel}
         value={code}
@@ -276,7 +288,7 @@ function PhoneRow({
         onChange={(e) => {
           onCode(e.target.value);
         }}
-        className={cn(inputCls, "w-28 shrink-0", error && "border-destructive")}
+        className={cn(inputCls, "w-auto shrink-0", error && "border-destructive")}
       >
         <option value="">+—</option>
         {[...new Set(COUNTRIES.map((c) => c.code))].map((c) => (
@@ -287,13 +299,11 @@ function PhoneRow({
       </select>
       <input
         type="tel"
-        inputMode="numeric"
-        disabled={disabled}
+        disabled={disabled || !code}
         value={number}
         onChange={handleNumberChange}
-        placeholder={`0${"0".repeat(maxDigits - 1)}`}
-        maxLength={maxDigits}
-        className={cn(inputCls, error && "border-destructive")}
+        placeholder={!code ? "Select a country code first." : "Phone number"}
+        className={cn(inputCls, "min-w-0 flex-1", error && "border-destructive")}
       />
     </div>
   );
@@ -356,8 +366,23 @@ function RegisterForm() {
     else if (!/^\S+@\S+\.\S+$/.test(d.email)) e.email = t("invalid_email");
     if (!d.gender) e.gender = t("required");
     if (!d.country) e.country = t("required");
-    if (!d.phoneCode || !d.phone?.trim()) e.phone = t("required");
-    if (!d.sameWhatsapp && (!d.whatsappCode || !d.whatsapp?.trim())) e.whatsapp = t("required");
+    if (!d.phoneCode) {
+      e.phone = "Select a country code first.";
+    } else if (!d.phone?.trim()) {
+      e.phone = "Enter your phone number.";
+    } else if (!isValidPhoneNumber(`${d.phoneCode}${d.phone}`)) {
+      e.phone = "This phone number is not valid for the selected country.";
+    }
+
+    if (!d.sameWhatsapp) {
+      if (!d.whatsappCode) {
+        e.whatsapp = "Select a country code first.";
+      } else if (!d.whatsapp?.trim()) {
+        e.whatsapp = "Enter your phone number.";
+      } else if (!isValidPhoneNumber(`${d.whatsappCode}${d.whatsapp}`)) {
+        e.whatsapp = "This phone number is not valid for the selected country.";
+      }
+    }
     if (!d.program) e.program = t("required");
     if (d.program === "Other Program" && !d.otherProgram?.trim()) e.otherProgram = t("required");
     if (!d.index?.trim()) e.index = t("required");
@@ -366,6 +391,44 @@ function RegisterForm() {
     setErrors(e);
     return Object.keys(e).length === 0;
   };
+
+  useEffect(() => {
+    if (!errors.phone && !errors.whatsapp) return;
+
+    setErrors((prev) => {
+      const next = { ...prev };
+
+      if (next.phone !== undefined) {
+        if (!d.phoneCode) {
+          next.phone = "Select a country code first.";
+        } else if (!d.phone?.trim()) {
+          next.phone = "Enter your phone number.";
+        } else if (!isValidPhoneNumber(`${d.phoneCode}${d.phone}`)) {
+          next.phone = "This phone number is not valid for the selected country.";
+        } else {
+          delete next.phone;
+        }
+      }
+
+      if (next.whatsapp !== undefined) {
+        if (!d.sameWhatsapp) {
+          if (!d.whatsappCode) {
+            next.whatsapp = "Select a country code first.";
+          } else if (!d.whatsapp?.trim()) {
+            next.whatsapp = "Enter your phone number.";
+          } else if (!isValidPhoneNumber(`${d.whatsappCode}${d.whatsapp}`)) {
+            next.whatsapp = "This phone number is not valid for the selected country.";
+          } else {
+            delete next.whatsapp;
+          }
+        } else {
+          delete next.whatsapp;
+        }
+      }
+
+      return next;
+    });
+  }, [d.phoneCode, d.phone, d.whatsappCode, d.whatsapp, d.sameWhatsapp, errors.phone, errors.whatsapp]);
 
   const onReview = (e: React.FormEvent) => {
     e.preventDefault();
@@ -407,15 +470,21 @@ function RegisterForm() {
           </p>
           <div className="mt-6 hidden flex-col gap-3 lg:flex">
             <div className="rounded-lg border border-blue-100/60 bg-white/70 px-4 py-3 backdrop-blur-sm">
-              <p className="text-xs font-semibold uppercase tracking-wider text-primary-deep">Personal</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-primary-deep">
+                Personal
+              </p>
               <p className="mt-1 text-sm text-muted-foreground">Name, email, gender</p>
             </div>
             <div className="rounded-lg border border-blue-100/60 bg-white/70 px-4 py-3 backdrop-blur-sm">
-              <p className="text-xs font-semibold uppercase tracking-wider text-primary-deep">Contact</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-primary-deep">
+                Contact
+              </p>
               <p className="mt-1 text-sm text-muted-foreground">Country, phone, WhatsApp</p>
             </div>
             <div className="rounded-lg border border-blue-100/60 bg-white/70 px-4 py-3 backdrop-blur-sm">
-              <p className="text-xs font-semibold uppercase tracking-wider text-primary-deep">Academic</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-primary-deep">
+                Academic
+              </p>
               <p className="mt-1 text-sm text-muted-foreground">Programme, index, level</p>
             </div>
           </div>
