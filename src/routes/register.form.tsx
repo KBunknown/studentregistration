@@ -280,7 +280,14 @@ function PhoneRow({
   };
 
   return (
-    <div className={cn("flex w-full gap-2", disabled && "opacity-60")}>
+    <div
+      className={cn(
+        "flex h-11 w-full items-center gap-1 overflow-hidden rounded-xl border border-blue-200 bg-white/80 px-1 shadow-[0_8px_22px_rgba(21,94,239,0.05)] backdrop-blur-[18px] transition-colors focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-400/10",
+        disabled && "cursor-not-allowed opacity-60",
+        error &&
+          "border-destructive focus-within:border-destructive focus-within:ring-destructive/10",
+      )}
+    >
       <select
         aria-label={codeLabel}
         value={code}
@@ -288,7 +295,12 @@ function PhoneRow({
         onChange={(e) => {
           onCode(e.target.value);
         }}
-        className={cn(inputCls, "w-auto shrink-0", error && "border-destructive")}
+        className="h-full w-[85px] shrink-0 cursor-pointer appearance-none bg-transparent pl-2 pr-6 text-sm font-medium text-foreground outline-none"
+        style={{
+          backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%23526174" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>')`,
+          backgroundPosition: "right 6px center",
+          backgroundRepeat: "no-repeat",
+        }}
       >
         <option value="">+—</option>
         {[...new Set(COUNTRIES.map((c) => c.code))].map((c) => (
@@ -297,13 +309,16 @@ function PhoneRow({
           </option>
         ))}
       </select>
+
+      <div className="h-5 w-[1px] shrink-0 bg-blue-200/60" />
+
       <input
         type="tel"
         disabled={disabled || !code}
         value={number}
         onChange={handleNumberChange}
-        placeholder={!code ? "Select a country code first." : "Phone number"}
-        className={cn(inputCls, "min-w-0 flex-1", error && "border-destructive")}
+        placeholder={!code ? "Select a country code first" : "Phone number"}
+        className="h-full min-w-0 flex-1 bg-transparent px-2 text-sm text-foreground outline-none placeholder:text-slate-400"
       />
     </div>
   );
@@ -428,7 +443,15 @@ function RegisterForm() {
 
       return next;
     });
-  }, [d.phoneCode, d.phone, d.whatsappCode, d.whatsapp, d.sameWhatsapp, errors.phone, errors.whatsapp]);
+  }, [
+    d.phoneCode,
+    d.phone,
+    d.whatsappCode,
+    d.whatsapp,
+    d.sameWhatsapp,
+    errors.phone,
+    errors.whatsapp,
+  ]);
 
   const onReview = (e: React.FormEvent) => {
     e.preventDefault();
