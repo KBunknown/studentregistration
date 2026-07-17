@@ -144,13 +144,13 @@ function ReviewPage() {
 
           <div className="flex flex-1 flex-col rounded-xl border border-white/30 bg-white/75 p-5 shadow-[0_24px_70px_rgba(21,94,239,0.08)] backdrop-blur-2xl sm:p-6 lg:p-8">
             <div className="min-h-0 flex-1 space-y-4 overflow-y-auto">
-              <InfoCard title="Personal Information">
+              <InfoCard title={t("sec_personal_info")}>
                 <Row label={t("f_fullname")} value={d.fullName} />
                 <Row label={t("f_email")} value={d.email} />
                 <Row label={t("f_gender")} value={d.gender} />
               </InfoCard>
 
-              <InfoCard title="Contact Information">
+              <InfoCard title={t("sec_contact_info")}>
                 <Row label={t("f_country")} value={d.country} />
                 <Row label={t("f_phone")} value={d.phone ? `${d.phoneCode} ${d.phone}` : ""} />
                 <Row
@@ -167,7 +167,7 @@ function ReviewPage() {
                 />
               </InfoCard>
 
-              <InfoCard title="Academic Information">
+              <InfoCard title={t("sec_academic_info")}>
                 <Row label={t("f_program")} value={programDisplay} />
                 <Row label={t("f_index")} value={d.index} />
                 <Row label={t("f_level")} value={d.level} />
@@ -188,7 +188,7 @@ function ReviewPage() {
                 {submitting ? (
                   <>
                     <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                    Submitting…
+                    {t("btn_submit")}...
                   </>
                 ) : (
                   <>

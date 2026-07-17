@@ -106,6 +106,7 @@ function PremiumSelect({
   disabled?: boolean;
   ariaLabel?: string;
 }) {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
 
   if (options.length > 10) {
@@ -139,9 +140,9 @@ function PremiumSelect({
           align="start"
         >
           <Command>
-            <CommandInput placeholder="Search..." />
+            <CommandInput placeholder={t("f_search")} />
             <CommandList>
-              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandEmpty>{t("f_no_results")}</CommandEmpty>
               <CommandGroup>
                 {options.map((o) => (
                   <CommandItem
@@ -197,6 +198,7 @@ function CountrySelect({
   onChange: (name: string, code: string) => void;
   error?: string;
 }) {
+  const { t } = useI18n();
   return (
     <PremiumSelect
       value={value}
@@ -204,7 +206,7 @@ function CountrySelect({
         const c = COUNTRIES.find((x) => x.name === v);
         if (c) onChange(c.name, c.code);
       }}
-      placeholder="Select a country"
+      placeholder={t("f_select_country")}
       options={COUNTRIES.map((c) => ({ value: c.name, label: c.name }))}
       error={error}
     />
@@ -228,6 +230,7 @@ function PhoneRow({
   error?: string;
   codeLabel: string;
 }) {
+  const { t } = useI18n();
   const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/[^\d\s()-]/g, "");
     onNumber(raw);
@@ -436,21 +439,21 @@ function RegisterForm() {
           <div className="mt-6 hidden flex-col gap-3 lg:flex">
             <div className="rounded-lg border border-blue-100/60 bg-white/10 px-4 py-3 backdrop-blur-sm">
               <p className="text-xs font-semibold uppercase tracking-wider text-primary-deep">
-                Personal
+                {t("sec_personal")}
               </p>
-              <p className="mt-1 text-sm text-muted-foreground">Name, email, gender</p>
+              <p className="mt-1 text-sm text-muted-foreground">{t("sec_personal_desc")}</p>
             </div>
             <div className="rounded-lg border border-blue-100/60 bg-white/10 px-4 py-3 backdrop-blur-sm">
               <p className="text-xs font-semibold uppercase tracking-wider text-primary-deep">
-                Contact
+                {t("sec_contact")}
               </p>
-              <p className="mt-1 text-sm text-muted-foreground">Country, phone, WhatsApp</p>
+              <p className="mt-1 text-sm text-muted-foreground">{t("sec_contact_desc")}</p>
             </div>
             <div className="rounded-lg border border-blue-100/60 bg-white/10 px-4 py-3 backdrop-blur-sm">
               <p className="text-xs font-semibold uppercase tracking-wider text-primary-deep">
-                Academic
+                {t("sec_academic")}
               </p>
-              <p className="mt-1 text-sm text-muted-foreground">Programme, index, level</p>
+              <p className="mt-1 text-sm text-muted-foreground">{t("sec_academic_desc")}</p>
             </div>
           </div>
         </aside>
@@ -459,7 +462,7 @@ function RegisterForm() {
           {Object.keys(errors).length > 0 && (
             <div className="mb-4 flex items-start gap-3 rounded-lg border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive backdrop-blur-sm">
               <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-              <p>Please correct the highlighted fields before continuing.</p>
+              <p>{t("err_highlighted")}</p>
             </div>
           )}
 
@@ -469,7 +472,7 @@ function RegisterForm() {
           >
             <div className="min-h-0 flex-1 overflow-y-auto">
               <section className="mb-8">
-                <SectionHeader title="Personal Information" />
+                <SectionHeader title={t("sec_personal_info")} />
                 <div className="grid gap-5 sm:grid-cols-2">
                   <Field label={t("f_fullname")} required error={errors.fullName}>
                     <input
@@ -494,7 +497,7 @@ function RegisterForm() {
                     <PremiumSelect
                       value={d.gender ?? ""}
                       onChange={(v) => set("gender", v)}
-                      placeholder="Select gender"
+                      placeholder={t("f_select_gender")}
                       error={errors.gender}
                       options={[
                         { value: "Female", label: t("f_female") },
@@ -508,7 +511,7 @@ function RegisterForm() {
               </section>
 
               <section className="mb-8">
-                <SectionHeader title="Contact Information" />
+                <SectionHeader title={t("sec_contact_info")} />
                 <div className="grid gap-5 sm:grid-cols-2">
                   <Field label={t("f_country")} required error={errors.country}>
                     <CountrySelect
@@ -559,7 +562,7 @@ function RegisterForm() {
               </section>
 
               <section className="mb-6">
-                <SectionHeader title="Academic Information" />
+                <SectionHeader title={t("sec_academic_info")} />
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div className="sm:col-span-2">
                     <Field label={t("f_program")} required error={errors.program}>
@@ -598,7 +601,7 @@ function RegisterForm() {
                     <PremiumSelect
                       value={d.level ?? ""}
                       onChange={(v) => set("level", v as Level)}
-                      placeholder="Select level"
+                      placeholder={t("f_select_level")}
                       error={errors.level}
                       options={LEVELS.map((l) => ({ value: l, label: l }))}
                     />
@@ -609,7 +612,7 @@ function RegisterForm() {
                       <div>
                         <p className="text-sm font-medium text-primary-deep">{t("f_grad_year")}</p>
                         <p className="mt-0.5 text-xs text-muted-foreground">
-                          Calculated from your current level
+                          {t("f_calc_level")}
                         </p>
                       </div>
                       <p className="font-heading text-2xl font-bold tabular-nums text-primary-deep">

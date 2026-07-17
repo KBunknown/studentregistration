@@ -131,29 +131,29 @@ function Already() {
         {result && result !== "none" && (
           <div className="mt-6 overflow-hidden rounded-xl border border-white/30 bg-white/75 shadow-[0_24px_70px_rgba(21,94,239,0.08)] backdrop-blur-2xl">
             <div className="border-b border-primary/10 bg-success/10 px-5 py-4">
-              <p className="font-heading text-sm font-semibold text-success">Registration Found</p>
+              <p className="font-heading text-sm font-semibold text-success">{t("already_found")}</p>
             </div>
             <dl className="divide-y divide-primary/10">
               <div className="grid grid-cols-[1fr_1.5fr] items-center gap-3 px-5 py-3.5">
-                <dt className="text-sm text-muted-foreground">Name</dt>
+                <dt className="text-sm text-muted-foreground">{t("f_name")}</dt>
                 <dd className="min-w-0 truncate text-right text-sm font-medium text-foreground sm:text-left">
                   {result.fullName}
                 </dd>
               </div>
               <div className="grid grid-cols-[1fr_1.5fr] items-center gap-3 px-5 py-3.5">
-                <dt className="text-sm text-muted-foreground">Program</dt>
+                <dt className="text-sm text-muted-foreground">{t("f_program")}</dt>
                 <dd className="min-w-0 truncate text-right text-sm font-medium text-foreground sm:text-left">
                   {result.program}
                 </dd>
               </div>
               <div className="grid grid-cols-[1fr_1.5fr] items-center gap-3 px-5 py-3.5">
-                <dt className="text-sm text-muted-foreground">Level</dt>
+                <dt className="text-sm text-muted-foreground">{t("f_level")}</dt>
                 <dd className="min-w-0 truncate text-right text-sm font-medium text-foreground sm:text-left">
                   {result.level}
                 </dd>
               </div>
               <div className="grid grid-cols-[1fr_1.5fr] items-center gap-3 px-5 py-3.5">
-                <dt className="text-sm text-muted-foreground">Expected graduation</dt>
+                <dt className="text-sm text-muted-foreground">{t("f_grad_year")}</dt>
                 <dd className="min-w-0 truncate text-right text-sm font-medium text-foreground sm:text-left">
                   {result.graduationYear}
                 </dd>
