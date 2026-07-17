@@ -91,7 +91,7 @@ function ReviewPage() {
           level: reg.level,
           graduation_year: reg.graduationYear,
         },
-        { returning: "minimal" }
+        { returning: "minimal" },
       );
       if (error) {
         console.error("Supabase insert error, falling back to localStorage:", error);

@@ -29,7 +29,9 @@ export function getAllRegistrations(): Registration[] {
   try {
     const stored = localStorage.getItem(REGS_KEY);
     if (stored) return JSON.parse(stored);
-  } catch {}
+  } catch {
+    // ignore
+  }
   return MOCK_REGISTRATIONS;
 }
 

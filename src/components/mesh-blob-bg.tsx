@@ -127,7 +127,7 @@ function Blob() {
       u_noiseScale: { value: 2.0 },
       u_noiseSpeed: { value: 1.0 },
     }),
-    []
+    [],
   );
 
   const targetPosition = useRef(new Vector3(0, 0, 0));
@@ -137,12 +137,11 @@ function Blob() {
     if (mesh.current) {
       const material = (mesh.current as THREE.Mesh).material as THREE.ShaderMaterial;
       material.uniforms.u_time.value = 0.4 * state.clock.getElapsedTime();
-      material.uniforms.u_noiseScale.value =
-        Math.sin(state.clock.getElapsedTime() * 0.1) * 1 + 1;
+      material.uniforms.u_noiseScale.value = Math.sin(state.clock.getElapsedTime() * 0.1) * 1 + 1;
       material.uniforms.u_intensity.value = MathUtils.lerp(
         material.uniforms.u_intensity.value,
         hover.current ? 0.5 : 0.35,
-        0.02
+        0.02,
       );
       targetPosition.current.set(state.mouse.x * 0.3, state.mouse.y * 0.3, 0);
       currentPosition.current.lerp(targetPosition.current, 0.08);

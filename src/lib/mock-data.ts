@@ -56,25 +56,25 @@ export const COUNTRIES = [
 ];
 
 export const COUNTRY_DIGITS: Record<string, number> = {
-  "+233": 9,  // Ghana
+  "+233": 9, // Ghana
   "+234": 10, // Nigeria
-  "+27": 9,   // South Africa
-  "+254": 9,  // Kenya
-  "+44": 10,  // United Kingdom
-  "+1": 10,   // US / Canada
-  "+33": 9,   // France
-  "+49": 10,  // Germany
-  "+86": 11,  // China
-  "+91": 10,  // India
-  "+55": 11,  // Brazil
-  "+20": 10,  // Egypt
-  "+237": 9,  // Cameroon
+  "+27": 9, // South Africa
+  "+254": 9, // Kenya
+  "+44": 10, // United Kingdom
+  "+1": 10, // US / Canada
+  "+33": 9, // France
+  "+49": 10, // Germany
+  "+86": 11, // China
+  "+91": 10, // India
+  "+55": 11, // Brazil
+  "+20": 10, // Egypt
+  "+237": 9, // Cameroon
   "+225": 10, // Côte d'Ivoire
-  "+221": 9,  // Senegal
-  "+212": 9,  // Morocco
-  "+255": 9,  // Tanzania
-  "+256": 9,  // Uganda
-  "+250": 9,  // Rwanda
+  "+221": 9, // Senegal
+  "+212": 9, // Morocco
+  "+255": 9, // Tanzania
+  "+256": 9, // Uganda
+  "+250": 9, // Rwanda
 };
 
 export function maxDigitsForCode(code: string): number {
@@ -115,8 +115,50 @@ export type Registration = {
   duplicateOf?: string;
 };
 
-const FIRST = ["Ama", "Kwame", "Adaeze", "Chinedu", "Fatima", "Yaw", "Nana", "Kojo", "Amara", "Zainab", "Ibrahim", "Serwaa", "Kofi", "Efua", "Abena", "Kwesi", "Akosua", "Aisha", "Sena", "Nia"];
-const LAST = ["Mensah", "Owusu", "Boateng", "Adjei", "Okafor", "Diallo", "Traoré", "Nkrumah", "Asante", "Osei", "Yeboah", "Sesay", "Kamara", "Bello", "Nwosu", "Amadi", "Adeyemi", "Bakayoko", "Kone", "Sarr"];
+const FIRST = [
+  "Ama",
+  "Kwame",
+  "Adaeze",
+  "Chinedu",
+  "Fatima",
+  "Yaw",
+  "Nana",
+  "Kojo",
+  "Amara",
+  "Zainab",
+  "Ibrahim",
+  "Serwaa",
+  "Kofi",
+  "Efua",
+  "Abena",
+  "Kwesi",
+  "Akosua",
+  "Aisha",
+  "Sena",
+  "Nia",
+];
+const LAST = [
+  "Mensah",
+  "Owusu",
+  "Boateng",
+  "Adjei",
+  "Okafor",
+  "Diallo",
+  "Traoré",
+  "Nkrumah",
+  "Asante",
+  "Osei",
+  "Yeboah",
+  "Sesay",
+  "Kamara",
+  "Bello",
+  "Nwosu",
+  "Amadi",
+  "Adeyemi",
+  "Bakayoko",
+  "Kone",
+  "Sarr",
+];
 
 function seededRand(seed: number) {
   return () => {
@@ -163,16 +205,70 @@ export const MOCK_REGISTRATIONS: Registration[] = (() => {
 })();
 
 export const MOCK_ADMINS = [
-  { id: "a1", name: "Grace Boateng", email: "grace@example.edu", role: "Super Admin", lastActive: "2 hours ago" },
-  { id: "a2", name: "Daniel Owusu", email: "daniel@example.edu", role: "Super Admin", lastActive: "Yesterday" },
-  { id: "a3", name: "Marie Diallo", email: "marie@example.edu", role: "Super Admin", lastActive: "3 days ago" },
+  {
+    id: "a1",
+    name: "Grace Boateng",
+    email: "grace@example.edu",
+    role: "Super Admin",
+    lastActive: "2 hours ago",
+  },
+  {
+    id: "a2",
+    name: "Daniel Owusu",
+    email: "daniel@example.edu",
+    role: "Super Admin",
+    lastActive: "Yesterday",
+  },
+  {
+    id: "a3",
+    name: "Marie Diallo",
+    email: "marie@example.edu",
+    role: "Super Admin",
+    lastActive: "3 days ago",
+  },
 ];
 
 export const MOCK_AUDIT = [
-  { id: "l1", when: "Today, 10:24", actor: "Grace Boateng", action: "Edited student profile", target: "reg_0004" },
-  { id: "l2", when: "Today, 09:12", actor: "Daniel Owusu", action: "Marked student as graduated", target: "reg_0018" },
-  { id: "l3", when: "Yesterday, 16:44", actor: "Grace Boateng", action: "Exported data (CSV)", target: "—" },
-  { id: "l4", when: "Yesterday, 14:01", actor: "Marie Diallo", action: "Resolved duplicate", target: "reg_0005" },
-  { id: "l5", when: "2 days ago", actor: "Grace Boateng", action: "Invited new admin", target: "sam@example.edu" },
-  { id: "l6", when: "3 days ago", actor: "Daniel Owusu", action: "Updated program list", target: "Cyber Security" },
+  {
+    id: "l1",
+    when: "Today, 10:24",
+    actor: "Grace Boateng",
+    action: "Edited student profile",
+    target: "reg_0004",
+  },
+  {
+    id: "l2",
+    when: "Today, 09:12",
+    actor: "Daniel Owusu",
+    action: "Marked student as graduated",
+    target: "reg_0018",
+  },
+  {
+    id: "l3",
+    when: "Yesterday, 16:44",
+    actor: "Grace Boateng",
+    action: "Exported data (CSV)",
+    target: "—",
+  },
+  {
+    id: "l4",
+    when: "Yesterday, 14:01",
+    actor: "Marie Diallo",
+    action: "Resolved duplicate",
+    target: "reg_0005",
+  },
+  {
+    id: "l5",
+    when: "2 days ago",
+    actor: "Grace Boateng",
+    action: "Invited new admin",
+    target: "sam@example.edu",
+  },
+  {
+    id: "l6",
+    when: "3 days ago",
+    actor: "Daniel Owusu",
+    action: "Updated program list",
+    target: "Cyber Security",
+  },
 ];
