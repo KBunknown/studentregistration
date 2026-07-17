@@ -166,15 +166,6 @@ export function AdminShell({ children, title }: { children: ReactNode; title: st
                 </h1>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="hidden text-right sm:block">
-                <p className="text-xs text-muted-foreground">Signed in as</p>
-                <p className="text-xs font-medium">admin@example.edu</p>
-              </div>
-              <span className="grid h-9 w-9 place-items-center rounded-full bg-primary-soft text-xs font-semibold text-primary-deep">
-                GB
-              </span>
-            </div>
           </header>
 
           <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
