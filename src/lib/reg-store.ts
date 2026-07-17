@@ -3,6 +3,7 @@ import { supabase } from "./supabase";
 
 // Draft used across the multi-step registration flow (client-only prototype).
 export type Draft = Partial<Registration> & { otherProgram?: string };
+export type AdminUser = { id: string; email: string; created_at: string; };
 
 const DRAFT_KEY = "isrp_draft";
 
@@ -65,9 +66,43 @@ export async function lookupRegistration(index: string, email: string): Promise<
   return data ? ({ index, email } as Registration) : null;
 }
 
+export async function getAdminUsers(): Promise<AdminUser[]> {
+  const { data, error } = await supabase.from("admin_users").select("*").order("created_at", { ascending: true });
+  if (error) throw error;
+  return data as AdminUser[];
+}
+
+export async function addAdminUser(email: string) {
+  const { error } = await supabase.from("admin_users").insert({ email: email.toLowerCase() });
+  if (error) throw error;
+}
+
+export async function removeAdminUser(id: string) {
+  const { error } = await supabase.from("admin_users").delete().eq("id", id);
+  if (error) throw error;
+}
+
 export async function checkAdminSession(): Promise<boolean> {
   const { data: { session } } = await supabase.auth.getSession();
-  return !!session;
+  if (!session) return false;
+  
+  // Verify authorization via RBAC table
+  const email = session.user.email?.toLowerCase();
+  if (!email) return false;
+  
+  const { data, error } = await supabase
+    .from("admin_users")
+    .select("id")
+    .eq("email", email)
+    .maybeSingle();
+    
+  if (error || !data) {
+    // Unauthorized! Nuke the session.
+    await supabase.auth.signOut();
+    return false;
+  }
+  
+  return true;
 }
 
 export async function logoutAdmin() {

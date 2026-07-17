@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { Trash2, Plus } from "lucide-react";
 import { AdminShell } from "@/components/admin-shell";
+import { getAdminUsers, addAdminUser, removeAdminUser, type AdminUser } from "@/lib/reg-store";
 
 export const Route = createFileRoute("/admin/settings")({
   component: Settings,
@@ -15,10 +17,112 @@ function Settings() {
   const [logo, setLogo] = useState("");
   const [contact, setContact] = useState("registrar@example.edu");
   const [openReg, setOpenReg] = useState(true);
+  
+  const [admins, setAdmins] = useState<AdminUser[]>([]);
+  const [newAdminEmail, setNewAdminEmail] = useState("");
+  const [loadingAdmins, setLoadingAdmins] = useState(true);
+
+  useEffect(() => {
+    fetchAdmins();
+  }, []);
+
+  const fetchAdmins = async () => {
+    try {
+      setAdmins(await getAdminUsers());
+    } catch {
+      toast.error("Failed to load admin team");
+    } finally {
+      setLoadingAdmins(false);
+    }
+  };
+
+  const handleAddAdmin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newAdminEmail.trim()) return;
+    try {
+      await addAdminUser(newAdminEmail);
+      toast.success("Admin added successfully");
+      setNewAdminEmail("");
+      fetchAdmins();
+    } catch {
+      toast.error("Failed to add admin. They might already exist.");
+    }
+  };
+
+  const handleRemoveAdmin = async (id: string) => {
+    if (!confirm("Remove this administrator?")) return;
+    try {
+      await removeAdminUser(id);
+      toast.success("Admin removed");
+      fetchAdmins();
+    } catch {
+      toast.error("Failed to remove admin");
+    }
+  };
 
   return (
     <AdminShell title="Settings">
       <div className="grid gap-6 lg:grid-cols-2">
+        <section className="glass-panel rounded-xl p-6 shadow-card lg:col-span-2">
+          <h2 className="font-heading text-base font-semibold text-primary-navy">
+            Admin Team Management
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Only users with emails listed here are allowed to access the admin dashboard.
+          </p>
+          
+          <div className="mt-6 rounded-lg border border-border overflow-hidden">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-muted/50 text-xs uppercase text-muted-foreground">
+                <tr>
+                  <th className="px-4 py-3 font-semibold">Email Address</th>
+                  <th className="px-4 py-3 font-semibold text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border bg-white">
+                {loadingAdmins ? (
+                  <tr><td colSpan={2} className="p-4 text-center text-muted-foreground">Loading...</td></tr>
+                ) : admins.length === 0 ? (
+                  <tr><td colSpan={2} className="p-4 text-center text-muted-foreground">No admins found. Add yourself!</td></tr>
+                ) : (
+                  admins.map((a) => (
+                    <tr key={a.id}>
+                      <td className="px-4 py-3 font-medium text-foreground">{a.email}</td>
+                      <td className="px-4 py-3 text-right">
+                        <button
+                          onClick={() => handleRemoveAdmin(a.id)}
+                          className="inline-flex items-center gap-1.5 rounded text-xs font-semibold text-destructive hover:bg-destructive/10 px-2 py-1 transition-colors"
+                        >
+                          <Trash2 className="h-3 w-3" /> Remove
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+            
+            <div className="border-t border-border bg-muted/20 p-4">
+              <form onSubmit={handleAddAdmin} className="flex gap-3">
+                <input
+                  type="email"
+                  className={inputCls}
+                  placeholder="new.admin@example.com"
+                  value={newAdminEmail}
+                  onChange={(e) => setNewAdminEmail(e.target.value)}
+                  required
+                />
+                <button
+                  type="submit"
+                  className="inline-flex items-center gap-1.5 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary-deep whitespace-nowrap"
+                >
+                  <Plus className="h-4 w-4" /> Add Admin
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
+        
         <section className="glass-panel rounded-xl p-6 shadow-card">
           <h2 className="font-heading text-base font-semibold text-primary-navy">
             Institution Branding
