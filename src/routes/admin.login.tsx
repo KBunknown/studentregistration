@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ShieldCheck, Eye, EyeOff } from "lucide-react";
-import { setAdmin } from "@/lib/reg-store";
+import { supabase } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 import { PremiumBackground } from "@/components/premium-background";
 
@@ -30,21 +30,38 @@ function Login() {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 500));
-    if (!password) {
-      setError("Enter your password to continue.");
+    
+    if (!password || !email) {
+      setError("Enter your email and password to continue.");
       setLoading(false);
       return;
     }
-    setAdmin(true);
+    
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    
+    setLoading(false);
+    
+    if (error) {
+      setError(error.message);
+      return;
+    }
+    
     navigate({ to: "/admin" });
   };
 
   const google = async () => {
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 400));
-    setAdmin(true);
-    navigate({ to: "/admin" });
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin + "/admin" }
+    });
+    if (error) {
+      setError(error.message);
+      setLoading(false);
+    }
   };
 
   return (

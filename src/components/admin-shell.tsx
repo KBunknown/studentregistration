@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { isAdmin, setAdmin } from "@/lib/reg-store";
+import { checkAdminSession, logoutAdmin } from "@/lib/reg-store";
 import { PremiumBackground } from "@/components/premium-background";
 
 const NAV_GROUPS = [
@@ -50,8 +50,10 @@ export function AdminShell({ children, title }: { children: ReactNode; title: st
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (!isAdmin()) navigate({ to: "/admin/login" });
-    else setChecked(true);
+    checkAdminSession().then((isValid) => {
+      if (!isValid) navigate({ to: "/admin/login" });
+      else setChecked(true);
+    });
   }, [navigate]);
 
   if (!checked) return null;
@@ -123,8 +125,8 @@ export function AdminShell({ children, title }: { children: ReactNode; title: st
   const LogoutButton = (
     <div className="border-t border-sidebar-border p-3">
       <button
-        onClick={() => {
-          setAdmin(false);
+        onClick={async () => {
+          await logoutAdmin();
           navigate({ to: "/admin/login" });
         }}
         className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-white"

@@ -5,7 +5,6 @@ import { supabase } from "./supabase";
 export type Draft = Partial<Registration> & { otherProgram?: string };
 
 const DRAFT_KEY = "isrp_draft";
-const AUTH_KEY = "isrp_admin_auth";
 
 export function getDraft(): Draft {
   if (typeof window === "undefined") return {};
@@ -52,12 +51,25 @@ export async function deleteRegistration(id: string) {
   if (error) throw error;
 }
 
-export function isAdmin(): boolean {
-  if (typeof window === "undefined") return false;
-  return localStorage.getItem(AUTH_KEY) === "1";
+export async function lookupRegistration(index: string, email: string): Promise<Registration | null> {
+  const { data, error } = await supabase.rpc("check_registration", {
+    search_index: index,
+    search_email: email,
+  });
+  
+  if (error) {
+    console.error("Error looking up registration:", error);
+    return null;
+  }
+  
+  return data ? ({ index, email } as Registration) : null;
 }
-export function setAdmin(v: boolean) {
-  if (typeof window === "undefined") return;
-  if (v) localStorage.setItem(AUTH_KEY, "1");
-  else localStorage.removeItem(AUTH_KEY);
+
+export async function checkAdminSession(): Promise<boolean> {
+  const { data: { session } } = await supabase.auth.getSession();
+  return !!session;
+}
+
+export async function logoutAdmin() {
+  await supabase.auth.signOut();
 }

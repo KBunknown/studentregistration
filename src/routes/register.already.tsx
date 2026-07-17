@@ -2,8 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Search } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
-import { getAllRegistrations } from "@/lib/reg-store";
-import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { lookupRegistration } from "@/lib/reg-store";
 import type { Registration } from "@/lib/mock-data";
 
 export const Route = createFileRoute("/register/already")({
@@ -24,45 +23,9 @@ function Already() {
     setResult(null);
 
     try {
-      if (isSupabaseConfigured && supabase) {
-        const { data, error } = await supabase
-          .from("students")
-          .select("*")
-          .eq("index_number", index.trim())
-          .eq("email", email.trim().toLowerCase())
-          .single();
-
-        if (error || !data) {
-          setResult("none");
-        } else {
-          setResult({
-            id: data.id,
-            fullName: data.full_name,
-            email: data.email,
-            gender: data.gender,
-            country: data.country,
-            phoneCode: data.phone_code,
-            phone: data.phone,
-            whatsappCode: data.whatsapp_code,
-            whatsapp: data.whatsapp,
-            sameWhatsapp: data.same_whatsapp,
-            program: data.program,
-            otherProgram: data.other_program,
-            index: data.index_number,
-            level: data.level,
-            graduationYear: data.graduation_year,
-            graduated: data.graduated,
-            registrationDate: data.registration_date,
-          });
-        }
-      } else {
-      const regs = await getAllRegistrations();
-      const match = regs.find(
-          (r) => r.index === index.trim() && r.email.toLowerCase() === email.trim().toLowerCase(),
-        );
-        setResult(match ?? "none");
-      }
-    } catch {
+      const match = await lookupRegistration(index.trim(), email.trim().toLowerCase());
+      setResult(match ?? "none");
+    } catch (err) {
       setResult("none");
     } finally {
       setSearching(false);
