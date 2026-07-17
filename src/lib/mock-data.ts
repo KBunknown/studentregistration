@@ -151,7 +151,7 @@ export function graduationYearFor(level: Level | ""): number | "" {
 }
 
 export type Registration = {
-  id: string;
+  id?: string;
   fullName: string;
   email: string;
   gender: string;

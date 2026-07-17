@@ -52,41 +52,40 @@ function ReviewPage() {
 
   const submit = async () => {
     setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 800));
-    const reg: Registration = {
-      id: crypto.randomUUID(),
-      fullName: d.fullName!,
-      email: d.email!,
-      gender: d.gender!,
-      country: d.country!,
-      phoneCode: d.phoneCode!,
-      phone: d.phone!,
-      whatsappCode: (d.sameWhatsapp ? d.phoneCode : d.whatsappCode) as string,
-      whatsapp: (d.sameWhatsapp ? d.phone : d.whatsapp) as string,
-      sameWhatsapp: !!d.sameWhatsapp,
-      program: d.program!,
-      otherProgram: d.otherProgram,
-      index: d.index!,
-      level: d.level!,
-      graduationYear: d.graduationYear as number,
-      graduated: false,
-      registrationDate: new Date().toISOString(),
-    };
-
     try {
-      await addRegistration(reg);
-    } catch (err) {
-      console.error("Insert error:", err);
-      toast.error("Registration failed. Please try again.");
-      setSubmitting(false);
-      return;
-    }
+      await new Promise((r) => setTimeout(r, 800));
+      const reg: Registration = {
+        fullName: d.fullName!,
+        email: d.email!,
+        gender: d.gender!,
+        country: d.country!,
+        phoneCode: d.phoneCode!,
+        phone: d.phone!,
+        whatsappCode: (d.sameWhatsapp ? d.phoneCode : d.whatsappCode) as string,
+        whatsapp: (d.sameWhatsapp ? d.phone : d.whatsapp) as string,
+        sameWhatsapp: !!d.sameWhatsapp,
+        program: d.program!,
+        otherProgram: d.otherProgram,
+        index: d.index!,
+        level: d.level!,
+        graduationYear: d.graduationYear as number,
+        graduated: false,
+        registrationDate: new Date().toISOString(),
+      };
 
-    if (typeof window !== "undefined") {
-      localStorage.setItem("isrp_last_submission", JSON.stringify(reg));
+      await addRegistration(reg);
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("isrp_last_submission", JSON.stringify(reg));
+      }
+      clearDraft();
+      navigate({ to: "/register/success" });
+    } catch (err) {
+      console.error("Submit error:", err);
+      toast.error("Registration failed. Please try again.");
+    } finally {
+      setSubmitting(false);
     }
-    clearDraft();
-    navigate({ to: "/register/success" });
   };
 
   const programDisplay = d.program === "Other Program" ? `${d.otherProgram} (Other)` : d.program;
