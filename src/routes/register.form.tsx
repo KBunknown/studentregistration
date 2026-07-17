@@ -163,7 +163,7 @@ function ProgramCombo({
         aria-expanded={open}
         className={cn(
           inputCls,
-          "flex w-full px-3 items-center justify-between gap-2 text-left whitespace-nowrap transition-colors hover:bg-blue-50/80",
+          "!flex w-full px-3 items-center justify-between gap-2 text-left whitespace-nowrap transition-colors hover:bg-blue-50/80",
           error && "border-destructive focus:shadow-[0_0_0_3px_rgba(196,61,75,0.15)]",
         )}
       >
