@@ -20,7 +20,7 @@ export const Route = createFileRoute("/admin/login")({
 
 function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("admin@example.edu");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
   const [error, setError] = useState<string | null>(null);

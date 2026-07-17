@@ -1,8 +1,9 @@
-import { createFileRoute, Link, useParams } from "@tanstack/react-router";
+import { createFileRoute, Link, useParams, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Mail, Phone, MessageCircle, MapPin, GraduationCap, Pencil } from "lucide-react";
+import { ArrowLeft, Mail, Phone, MessageCircle, MapPin, GraduationCap, Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { AdminShell } from "@/components/admin-shell";
-import { getAllRegistrations } from "@/lib/reg-store";
+import { getAllRegistrations, deleteRegistration } from "@/lib/reg-store";
 import type { Registration } from "@/lib/mock-data";
 
 export const Route = createFileRoute("/admin/students/$id")({
@@ -21,14 +22,32 @@ function Field({ label, value }: { label: string; value: string | number }) {
 }
 
 function StudentProfile() {
+  const navigate = useNavigate();
   const { id } = useParams({ from: "/admin/students/$id" });
   const [r, setR] = useState<Registration | null | undefined>(undefined);
+  const [isDeleting, setIsDeleting] = useState(false);
+  
   useEffect(() => {
     getAllRegistrations().then((regs) => {
       const found = regs.find((x) => x.id === id);
       setR(found ?? null);
     });
   }, [id]);
+
+  const handleDelete = async () => {
+    if (!r) return;
+    if (!confirm("Are you sure you want to permanently delete this student record?")) return;
+    
+    setIsDeleting(true);
+    try {
+      await deleteRegistration(r.id);
+      toast.success("Student record deleted successfully");
+      navigate({ to: "/admin/registrations" });
+    } catch (err) {
+      toast.error("Failed to delete student record");
+      setIsDeleting(false);
+    }
+  };
 
   if (r === undefined)
     return (
@@ -67,13 +86,22 @@ function StudentProfile() {
         >
           <ArrowLeft className="h-4 w-4" /> Back to registrations
         </Link>
-        <Link
-          to="/admin/students/$id/edit"
-          params={{ id: r.id }}
-          className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-deep"
-        >
-          <Pencil className="h-4 w-4" /> Edit Profile
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            to="/admin/students/$id/edit"
+            params={{ id: r.id }}
+            className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-deep"
+          >
+            <Pencil className="h-4 w-4" /> Edit Profile
+          </Link>
+          <button
+            onClick={handleDelete}
+            disabled={isDeleting}
+            className="inline-flex items-center gap-2 rounded-md border border-destructive/20 bg-destructive/10 px-4 py-2 text-sm font-semibold text-destructive shadow-sm transition-colors hover:bg-destructive hover:text-destructive-foreground disabled:opacity-50"
+          >
+            <Trash2 className="h-4 w-4" /> Delete
+          </button>
+        </div>
       </div>
 
       <div className="mt-6 glass-panel rounded-xl p-6 shadow-card sm:p-8">

@@ -3,9 +3,9 @@ import { lazy, Suspense, useEffect, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { ArrowRight } from "lucide-react";
 
-const MeshBlobBg = lazy(() =>
-  import("@/components/mesh-blob-bg").then((m) => ({ default: m.MeshBlobBg })),
-);
+// Start fetching the heavy Three.js chunk immediately instead of waiting for render
+const MeshBlobBgPromise = import("@/components/mesh-blob-bg");
+const MeshBlobBg = lazy(() => MeshBlobBgPromise.then((m) => ({ default: m.MeshBlobBg })));
 
 export const Route = createFileRoute("/register/")({
   head: () => ({
@@ -20,18 +20,20 @@ export const Route = createFileRoute("/register/")({
   component: LandingPage,
 });
 
+function ReadyNotifier({ onReady }: { onReady: () => void }) {
+  useEffect(() => {
+    // Canvas might need an extra frame to paint the Three.js content
+    const id = requestAnimationFrame(() => {
+      // Add a tiny delay to ensure shader compiles
+      setTimeout(onReady, 50);
+    });
+    return () => cancelAnimationFrame(id);
+  }, [onReady]);
+  return null;
+}
+
 function LazyBackground() {
   const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    // Check if the user prefers reduced motion — skip the animation entirely
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mq.matches) return;
-
-    // Small delay so the fade-in starts after the canvas has had time to render a frame
-    const id = requestAnimationFrame(() => setReady(true));
-    return () => cancelAnimationFrame(id);
-  }, []);
 
   // Respect reduced-motion: don't load the heavy WebGL canvas at all
   const prefersReducedMotion =
@@ -52,6 +54,7 @@ function LazyBackground() {
     >
       <Suspense fallback={null}>
         <MeshBlobBg />
+        <ReadyNotifier onReady={() => setReady(true)} />
       </Suspense>
     </div>
   );
@@ -67,7 +70,7 @@ function LandingPage() {
       <div className="relative z-10 flex min-h-screen flex-col">
         <header className="flex items-center justify-between px-6 py-5 sm:px-10 lg:px-16">
           <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="Logo" className="h-10 w-10 object-contain drop-shadow-sm" />
+            <img src="/logo.png" alt="Logo" className="h-10 w-10 object-contain drop-shadow-sm" fetchPriority="high" decoding="async" />
             <span className="font-heading text-sm font-bold tracking-tight text-primary-navy sm:text-[15px]">
               {t("portal_title")}
             </span>
@@ -85,6 +88,8 @@ function LandingPage() {
                       alt="International Student Registration"
                       className="max-w-none"
                       style={{ height: "118%", width: "118%", objectFit: "cover" }}
+                      fetchPriority="high"
+                      decoding="async"
                     />
                   </div>
                   <div className="flex h-36 w-36 items-center justify-center overflow-hidden drop-shadow-xl">
@@ -92,6 +97,8 @@ function LandingPage() {
                       src="/emblem.png"
                       alt="Partner emblem"
                       className="h-full w-full object-contain opacity-90"
+                      fetchPriority="high"
+                      decoding="async"
                     />
                   </div>
                 </div>
