@@ -33,48 +33,104 @@ export const LEVELS = ["Level 100", "Level 200", "Level 300", "Level 400"] as co
 export type Level = (typeof LEVELS)[number];
 
 export const COUNTRIES = [
+  // ALL African Countries
+  { name: "Algeria", code: "+213" },
+  { name: "Angola", code: "+244" },
+  { name: "Benin", code: "+229" },
+  { name: "Botswana", code: "+267" },
+  { name: "Burkina Faso", code: "+226" },
+  { name: "Burundi", code: "+257" },
+  { name: "Cabo Verde", code: "+238" },
+  { name: "Cameroon", code: "+237" },
+  { name: "Central African Republic", code: "+236" },
+  { name: "Chad", code: "+235" },
+  { name: "Comoros", code: "+269" },
+  { name: "Congo (DRC)", code: "+243" },
+  { name: "Congo (Republic)", code: "+242" },
+  { name: "Côte d'Ivoire", code: "+225" },
+  { name: "Djibouti", code: "+253" },
+  { name: "Egypt", code: "+20" },
+  { name: "Equatorial Guinea", code: "+240" },
+  { name: "Eritrea", code: "+291" },
+  { name: "Eswatini", code: "+268" },
+  { name: "Ethiopia", code: "+251" },
+  { name: "Gabon", code: "+241" },
+  { name: "Gambia", code: "+220" },
   { name: "Ghana", code: "+233" },
-  { name: "Nigeria", code: "+234" },
-  { name: "South Africa", code: "+27" },
+  { name: "Guinea", code: "+224" },
+  { name: "Guinea-Bissau", code: "+245" },
   { name: "Kenya", code: "+254" },
-  { name: "United Kingdom", code: "+44" },
+  { name: "Lesotho", code: "+266" },
+  { name: "Liberia", code: "+231" },
+  { name: "Libya", code: "+218" },
+  { name: "Madagascar", code: "+261" },
+  { name: "Malawi", code: "+265" },
+  { name: "Mali", code: "+223" },
+  { name: "Mauritania", code: "+222" },
+  { name: "Mauritius", code: "+230" },
+  { name: "Morocco", code: "+212" },
+  { name: "Mozambique", code: "+258" },
+  { name: "Namibia", code: "+264" },
+  { name: "Niger", code: "+227" },
+  { name: "Nigeria", code: "+234" },
+  { name: "Rwanda", code: "+250" },
+  { name: "Sao Tome and Principe", code: "+239" },
+  { name: "Senegal", code: "+221" },
+  { name: "Seychelles", code: "+248" },
+  { name: "Sierra Leone", code: "+232" },
+  { name: "Somalia", code: "+252" },
+  { name: "South Africa", code: "+27" },
+  { name: "South Sudan", code: "+211" },
+  { name: "Sudan", code: "+249" },
+  { name: "Tanzania", code: "+255" },
+  { name: "Togo", code: "+228" },
+  { name: "Tunisia", code: "+216" },
+  { name: "Uganda", code: "+256" },
+  { name: "Zambia", code: "+260" },
+  { name: "Zimbabwe", code: "+263" },
+  
+  // Diverse Global Countries
   { name: "United States", code: "+1" },
   { name: "Canada", code: "+1" },
+  { name: "United Kingdom", code: "+44" },
+  { name: "Australia", code: "+61" },
+  { name: "New Zealand", code: "+64" },
   { name: "France", code: "+33" },
   { name: "Germany", code: "+49" },
+  { name: "Italy", code: "+39" },
+  { name: "Spain", code: "+34" },
   { name: "China", code: "+86" },
+  { name: "Japan", code: "+81" },
+  { name: "South Korea", code: "+82" },
   { name: "India", code: "+91" },
+  { name: "Pakistan", code: "+92" },
+  { name: "Bangladesh", code: "+880" },
+  { name: "Indonesia", code: "+62" },
   { name: "Brazil", code: "+55" },
-  { name: "Egypt", code: "+20" },
-  { name: "Cameroon", code: "+237" },
-  { name: "Côte d'Ivoire", code: "+225" },
-  { name: "Senegal", code: "+221" },
-  { name: "Morocco", code: "+212" },
-  { name: "Tanzania", code: "+255" },
-  { name: "Uganda", code: "+256" },
-  { name: "Rwanda", code: "+250" },
-];
+  { name: "Argentina", code: "+54" },
+  { name: "Mexico", code: "+52" },
+  { name: "Colombia", code: "+57" },
+  { name: "Saudi Arabia", code: "+966" },
+  { name: "United Arab Emirates", code: "+971" },
+  { name: "Turkey", code: "+90" },
+].sort((a, b) => a.name.localeCompare(b.name));
 
 export const COUNTRY_DIGITS: Record<string, number> = {
-  "+233": 9, // Ghana
-  "+234": 10, // Nigeria
-  "+27": 9, // South Africa
-  "+254": 9, // Kenya
-  "+44": 10, // United Kingdom
-  "+1": 10, // US / Canada
-  "+33": 9, // France
-  "+49": 10, // Germany
-  "+86": 11, // China
-  "+91": 10, // India
-  "+55": 11, // Brazil
-  "+20": 10, // Egypt
-  "+237": 9, // Cameroon
+  // Common overrides where digits aren't typically 10
+  "+233": 9,  // Ghana
+  "+27": 9,   // South Africa
+  "+254": 9,  // Kenya
+  "+33": 9,   // France
+  "+86": 11,  // China
+  "+55": 11,  // Brazil
+  "+237": 9,  // Cameroon
+  "+221": 9,  // Senegal
+  "+212": 9,  // Morocco
+  "+255": 9,  // Tanzania
+  "+256": 9,  // Uganda
+  "+250": 9,  // Rwanda
+  "+223": 8,  // Mali
   "+225": 10, // Côte d'Ivoire
-  "+221": 9, // Senegal
-  "+212": 9, // Morocco
-  "+255": 9, // Tanzania
-  "+256": 9, // Uganda
-  "+250": 9, // Rwanda
 };
 
 export function maxDigitsForCode(code: string): number {
