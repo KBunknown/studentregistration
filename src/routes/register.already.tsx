@@ -95,7 +95,7 @@ function Already() {
 
         <form
           onSubmit={lookup}
-          className="grid gap-5 rounded-xl border border-white/30 bg-white/60 p-6 shadow-[0_24px_70px_rgba(21,94,239,0.08)] backdrop-blur-2xl sm:p-8"
+          className="grid gap-5 rounded-xl border border-white/30 bg-white/20 p-6 shadow-[0_24px_70px_rgba(21,94,239,0.08)] backdrop-blur-2xl sm:p-8"
         >
           <label className="grid gap-1.5">
             <span className="text-sm font-medium text-foreground">{t("f_index")}</span>

@@ -76,7 +76,7 @@ function LandingPage() {
 
         <main className="flex flex-1 items-center justify-center px-4 py-8 sm:px-6">
           <div className="w-full max-w-2xl">
-            <div className="rounded-3xl border border-blue-100 bg-white/60 p-8 shadow-[0_24px_70px_rgba(21,94,239,0.1)] backdrop-blur-2xl sm:p-12 lg:p-16">
+            <div className="rounded-3xl border border-blue-100 bg-white/20 p-8 shadow-[0_24px_70px_rgba(21,94,239,0.1)] backdrop-blur-2xl sm:p-12 lg:p-16">
               <div className="flex flex-col items-center text-center">
                 <div className="flex items-center justify-center gap-8">
                   <div className="flex h-36 w-36 items-center justify-center overflow-hidden drop-shadow-xl">
