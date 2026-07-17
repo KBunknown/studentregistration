@@ -196,7 +196,7 @@ function RegistrationsPage() {
             value={sort}
             onChange={(v) => setSort(v as SortKey)}
             placeholder="Sort"
-            className="w-[15rem] font-medium"
+            className="flex-1 sm:w-[15rem] sm:flex-none font-medium"
             options={[
               { value: "newest", label: "Newest" },
               { value: "oldest", label: "Oldest" },
