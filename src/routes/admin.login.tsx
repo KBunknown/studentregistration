@@ -23,6 +23,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -37,19 +38,34 @@ function Login() {
       return;
     }
     
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    
-    setLoading(false);
-    
-    if (error) {
-      setError(error.message);
-      return;
+    if (isSignUp) {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+      setLoading(false);
+      
+      if (error) {
+        setError(error.message);
+        return;
+      }
+      
+      // Successfully signed up and automatically logged in!
+      navigate({ to: "/admin" });
+    } else {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      setLoading(false);
+      
+      if (error) {
+        setError(error.message);
+        return;
+      }
+      
+      navigate({ to: "/admin" });
     }
-    
-    navigate({ to: "/admin" });
   };
 
 
@@ -113,7 +129,18 @@ function Login() {
               disabled={loading}
               className="btn-primary w-full disabled:opacity-70"
             >
-              {loading ? "Signing in…" : "Sign in"}
+              {loading ? "Please wait…" : isSignUp ? "Create Account" : "Sign in"}
+            </button>
+            
+            <button
+              type="button"
+              onClick={() => {
+                setIsSignUp(!isSignUp);
+                setError(null);
+              }}
+              className="text-sm font-medium text-primary hover:text-primary-deep hover:underline mt-2 text-center"
+            >
+              {isSignUp ? "Already have an account? Sign in" : "Authorized by a team member? Set your password"}
             </button>
           </form>
         </div>
