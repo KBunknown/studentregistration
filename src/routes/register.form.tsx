@@ -16,6 +16,15 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import { useI18n, type Lang } from "@/lib/i18n";
 import { COUNTRIES, LEVELS, PROGRAMS, graduationYearFor, type Level } from "@/lib/mock-data";
@@ -97,6 +106,69 @@ function PremiumSelect({
   disabled?: boolean;
   ariaLabel?: string;
 }) {
+  const [open, setOpen] = useState(false);
+
+  if (options.length > 10) {
+    const selectedLabel = options.find((o) => o.value === value)?.label;
+    return (
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            disabled={disabled}
+            aria-label={ariaLabel}
+            className={cn(
+              "!flex items-center justify-between gap-2 text-left whitespace-nowrap",
+              className || cn(inputCls, "w-full px-3 transition-colors hover:bg-blue-50/80"),
+              error && "border-destructive focus:shadow-[0_0_0_3px_rgba(196,61,75,0.15)]",
+            )}
+          >
+            <span
+              className={cn(
+                "flex-1 overflow-hidden text-ellipsis whitespace-nowrap",
+                !value && "text-muted-foreground",
+              )}
+            >
+              {selectedLabel || placeholder}
+            </span>
+            <ChevronDown className="h-4 w-4 shrink-0 opacity-50" />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent
+          className="w-[var(--radix-popover-trigger-width)] min-w-[220px] p-0"
+          align="start"
+        >
+          <Command>
+            <CommandInput placeholder="Search..." />
+            <CommandList>
+              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandGroup>
+                {options.map((o) => (
+                  <CommandItem
+                    key={o.value}
+                    value={o.label}
+                    onSelect={() => {
+                      onChange(o.value);
+                      setOpen(false);
+                    }}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value === o.value ? "opacity-100" : "opacity-0",
+                      )}
+                    />
+                    {o.label}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    );
+  }
+
   return (
     <Select value={value} onValueChange={onChange} disabled={disabled}>
       <SelectTrigger
@@ -113,129 +185,6 @@ function PremiumSelect({
         ))}
       </SelectContent>
     </Select>
-  );
-}
-
-function ProgramCombo({
-  value,
-  onChange,
-  placeholder,
-  error,
-}: {
-  value: string;
-  onChange: (v: string) => void;
-  placeholder: string;
-  error?: string;
-}) {
-  const [open, setOpen] = useState(false);
-  const [q, setQ] = useState("");
-  const [active, setActive] = useState(0);
-  const filtered = useMemo(
-    () => PROGRAMS.filter((p) => p.toLowerCase().includes(q.toLowerCase())),
-    [q],
-  );
-  useEffect(() => setActive(0), [q, open]);
-  useEffect(() => {
-    if (!open) return;
-    const close = (e: MouseEvent) => {
-      if (!(e.target as HTMLElement).closest("[data-program-combo]")) setOpen(false);
-    };
-    window.addEventListener("click", close);
-    return () => window.removeEventListener("click", close);
-  }, [open]);
-  const choose = (p: string) => {
-    onChange(p);
-    setOpen(false);
-    setQ("");
-  };
-  return (
-    <div className="relative" data-program-combo>
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        onKeyDown={(e) => {
-          if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            setOpen(true);
-          }
-        }}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        className={cn(
-          inputCls,
-          "!flex w-full px-3 items-center justify-between gap-2 text-left whitespace-nowrap transition-colors hover:bg-blue-50/80",
-          error && "border-destructive focus:shadow-[0_0_0_3px_rgba(196,61,75,0.15)]",
-        )}
-      >
-        <span
-          className={cn(
-            "flex-1 overflow-hidden text-ellipsis whitespace-nowrap",
-            !value && "text-muted-foreground",
-          )}
-        >
-          {value || placeholder}
-        </span>
-        <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
-      </button>
-      {open && (
-        <div className="absolute z-20 mt-2 w-full overflow-hidden rounded-xl border border-blue-100 bg-white/95 shadow-[0_18px_50px_-20px_rgba(21,94,239,0.35)] backdrop-blur-xl">
-          <div className="flex items-center gap-2 border-b border-primary/10 px-3 py-2.5">
-            <Search className="h-4 w-4 text-muted-foreground" />
-            <input
-              autoFocus
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Escape") {
-                  e.preventDefault();
-                  setOpen(false);
-                }
-                if (e.key === "ArrowDown") {
-                  e.preventDefault();
-                  setActive((i) => Math.min(i + 1, filtered.length - 1));
-                }
-                if (e.key === "ArrowUp") {
-                  e.preventDefault();
-                  setActive((i) => Math.max(i - 1, 0));
-                }
-                if (e.key === "Enter" && filtered[active]) {
-                  e.preventDefault();
-                  choose(filtered[active]);
-                }
-              }}
-              placeholder="Search programs"
-              className="h-9 flex-1 bg-transparent text-sm outline-none"
-            />
-          </div>
-          <ul className="max-h-72 overflow-y-auto p-1.5" role="listbox">
-            {filtered.length === 0 ? (
-              <li className="px-3 py-4 text-center text-xs text-muted-foreground">
-                No programs match your search.
-              </li>
-            ) : (
-              filtered.map((p, i) => (
-                <li key={p}>
-                  <button
-                    type="button"
-                    role="option"
-                    aria-selected={p === value}
-                    onMouseEnter={() => setActive(i)}
-                    onClick={() => choose(p)}
-                    className={cn(
-                      "flex min-h-11 w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm transition-colors hover:bg-blue-50",
-                      i === active && "bg-blue-50",
-                    )}
-                  >
-                    <span className="truncate">{p}</span>
-                    {p === value && <Check className="h-4 w-4 shrink-0 text-primary" />}
-                  </button>
-                </li>
-              ))
-            )}
-          </ul>
-        </div>
-      )}
-    </div>
   );
 }
 
@@ -293,21 +242,15 @@ function PhoneRow({
           "border-destructive focus-within:border-destructive focus-within:ring-destructive/10",
       )}
     >
-      <Select value={code} onValueChange={onCode} disabled={disabled}>
-        <SelectTrigger
-          aria-label={codeLabel}
-          className="!h-full !w-[85px] shrink-0 !border-0 !bg-transparent !px-2 !shadow-none !rounded-none focus:!ring-0 hover:!bg-transparent text-sm font-medium"
-        >
-          <SelectValue placeholder="+—" />
-        </SelectTrigger>
-        <SelectContent>
-          {[...new Set(COUNTRIES.map((c) => c.code))].map((c) => (
-            <SelectItem key={c} value={c}>
-              {c}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <PremiumSelect
+        ariaLabel={codeLabel}
+        value={code}
+        onChange={onCode}
+        disabled={disabled}
+        placeholder="+—"
+        options={[...new Set(COUNTRIES.map((c) => c.code))].map((c) => ({ value: c, label: c }))}
+        className="!h-full !w-[85px] shrink-0 !border-0 !bg-transparent !px-2 !shadow-none !rounded-none focus:!ring-0 hover:!bg-transparent text-sm font-medium"
+      />
 
       <div className="h-5 w-[1px] shrink-0 bg-blue-200/60" />
 
@@ -620,11 +563,12 @@ function RegisterForm() {
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div className="sm:col-span-2">
                     <Field label={t("f_program")} required error={errors.program}>
-                      <ProgramCombo
+                      <PremiumSelect
                         value={d.program ?? ""}
                         onChange={(v) => set("program", v)}
                         placeholder={t("f_program_ph")}
                         error={errors.program}
+                        options={PROGRAMS.map((p) => ({ value: p, label: p }))}
                       />
                     </Field>
                   </div>
