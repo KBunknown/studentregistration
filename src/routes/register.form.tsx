@@ -163,11 +163,11 @@ function ProgramCombo({
         aria-expanded={open}
         className={cn(
           inputCls,
-          "flex items-center justify-between text-left transition-colors hover:bg-blue-50/80",
+          "flex w-full px-3 items-center justify-between gap-2 text-left transition-colors hover:bg-blue-50/80",
           error && "border-destructive focus:shadow-[0_0_0_3px_rgba(196,61,75,0.15)]",
         )}
       >
-        <span className={cn("truncate", !value && "text-muted-foreground")}>
+        <span className={cn("flex-1 truncate min-w-0", !value && "text-muted-foreground")}>
           {value || placeholder}
         </span>
         <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
