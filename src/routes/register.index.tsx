@@ -1,7 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { ArrowRight } from "lucide-react";
-import { MeshBlobBg } from "@/components/mesh-blob-bg";
+
+const MeshBlobBg = lazy(() =>
+  import("@/components/mesh-blob-bg").then((m) => ({ default: m.MeshBlobBg }))
+);
 
 export const Route = createFileRoute("/register/")({
   head: () => ({
@@ -16,12 +20,50 @@ export const Route = createFileRoute("/register/")({
   component: LandingPage,
 });
 
+function LazyBackground() {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    // Check if the user prefers reduced motion — skip the animation entirely
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mq.matches) return;
+
+    // Small delay so the fade-in starts after the canvas has had time to render a frame
+    const id = requestAnimationFrame(() => setReady(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  // Respect reduced-motion: don't load the heavy WebGL canvas at all
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (prefersReducedMotion) return null;
+
+  return (
+    <div
+      style={{
+        opacity: ready ? 1 : 0,
+        transition: "opacity 0.6s ease-in",
+        position: "fixed",
+        inset: 0,
+        zIndex: 0,
+        pointerEvents: "none",
+      }}
+    >
+      <Suspense fallback={null}>
+        <MeshBlobBg />
+      </Suspense>
+    </div>
+  );
+}
+
 function LandingPage() {
   const { t } = useI18n();
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#0a1628]">
-      <MeshBlobBg />
+      <LazyBackground />
 
       <div className="relative z-10 flex min-h-screen flex-col">
         <header className="flex items-center justify-between px-6 py-5 sm:px-10 lg:px-16">
