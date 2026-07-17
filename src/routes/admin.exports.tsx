@@ -23,8 +23,60 @@ function ExportsPage() {
     });
   }, [scope]);
 
-  const handleExport = () => {
-    toast.success("Export queued successfully");
+  const handleExport = async () => {
+    try {
+      const regs = await getAllRegistrations();
+      let filtered = regs;
+      if (scope === "active") filtered = regs.filter((r) => !r.graduated);
+      else if (scope === "graduated") filtered = regs.filter((r) => r.graduated);
+
+      if (filtered.length === 0) {
+        toast.error("No records found to export");
+        return;
+      }
+
+      let content = "";
+      let mimeType = "text/plain";
+      
+      if (fmt === "json") {
+        content = JSON.stringify(filtered, null, 2);
+        mimeType = "application/json";
+      } else {
+        const headers = ["Index", "Full Name", "Email", "Gender", "Country", "Phone", "WhatsApp", "Program", "Level", "Graduation Year", "Graduated", "Date"];
+        const rows = filtered.map(r => [
+          r.index,
+          r.fullName,
+          r.email,
+          r.gender || "",
+          r.country || "",
+          r.phoneCode ? `${r.phoneCode} ${r.phone}` : r.phone || "",
+          r.whatsappCode ? `${r.whatsappCode} ${r.whatsapp}` : r.whatsapp || "",
+          r.program === "Other Program" ? r.otherProgram : r.program,
+          r.level || "",
+          r.graduationYear || "",
+          r.graduated ? "Yes" : "No",
+          r.registrationDate
+        ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(","));
+        
+        content = [headers.join(","), ...rows].join("\n");
+        mimeType = "text/csv";
+      }
+
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `registrations_${scope}_${new Date().toISOString().split("T")[0]}.${fmt}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      toast.success(`Successfully downloaded ${filtered.length} records`);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to generate export file");
+    }
   };
 
   return (
@@ -51,7 +103,7 @@ function ExportsPage() {
             <div className="grid gap-2">
               <label className="text-sm font-medium text-foreground">File format</label>
               <div className="flex gap-2">
-                {["csv", "xlsx", "json"].map((f) => (
+                {["csv", "json"].map((f) => (
                   <button
                     key={f}
                     type="button"
