@@ -411,7 +411,7 @@ function RegisterForm() {
   return (
     <div className="mesh-gradient-bg relative min-h-screen">
       <header className="sticky top-0 z-30 border-b border-white/20 bg-white/10 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between gap-3 px-4 sm:px-5 lg:px-8">
+        <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between gap-3 px-3 sm:px-5 lg:px-8">
           <Link to="/register" className="flex min-w-0 items-center gap-2.5">
             <img
               src="/logo.png"
@@ -428,7 +428,7 @@ function RegisterForm() {
         </div>
       </header>
 
-      <div className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-[1600px] flex-col px-4 py-5 sm:px-5 lg:flex-row lg:gap-6 lg:px-6 lg:py-6 xl:gap-8 xl:px-8">
+      <div className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-[1600px] flex-col px-3 py-5 sm:px-5 lg:flex-row lg:gap-6 lg:px-6 lg:py-6 xl:gap-8 xl:px-8">
         <aside className="mb-5 flex shrink-0 flex-col justify-center lg:mb-0 lg:w-[28%] lg:max-w-sm lg:py-4 xl:w-[25%]">
           <h1 className="font-heading text-2xl font-bold tracking-tight text-primary-navy sm:text-3xl lg:text-[1.75rem] xl:text-3xl">
             {t("form_title")}
@@ -468,7 +468,7 @@ function RegisterForm() {
 
           <form
             onSubmit={onReview}
-            className="flex min-h-0 flex-1 flex-col rounded-xl border border-white/30 bg-white/20 p-5 shadow-[0_24px_70px_rgba(21,94,239,0.08)] backdrop-blur-2xl sm:p-6 lg:p-8"
+            className="flex min-h-0 flex-1 flex-col rounded-xl border border-white/30 bg-white/20 p-4 shadow-[0_24px_70px_rgba(21,94,239,0.08)] backdrop-blur-2xl sm:p-6 lg:p-8"
           >
             <div className="min-h-0 flex-1 overflow-y-auto">
               <section className="mb-8">
@@ -648,7 +648,7 @@ function RegisterForm() {
             </div>
 
             <div className="mt-6 shrink-0 border-t border-primary/10 pt-6">
-              <button type="submit" className="btn-primary w-full sm:ml-auto sm:w-auto whitespace-nowrap">
+              <button type="submit" className="btn-primary w-full sm:ml-auto sm:w-auto px-4 sm:px-6 whitespace-nowrap">
                 {t("btn_review")}
               </button>
             </div>

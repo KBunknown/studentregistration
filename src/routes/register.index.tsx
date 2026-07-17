@@ -76,7 +76,7 @@ function LandingPage() {
 
         <main className="flex flex-1 items-center justify-center px-4 py-8 sm:px-6">
           <div className="w-full max-w-2xl">
-            <div className="rounded-3xl border border-blue-100 bg-white/20 p-8 shadow-[0_24px_70px_rgba(21,94,239,0.1)] backdrop-blur-2xl sm:p-12 lg:p-16">
+            <div className="rounded-3xl border border-blue-100 bg-white/20 p-6 shadow-[0_24px_70px_rgba(21,94,239,0.1)] backdrop-blur-2xl sm:p-12 lg:p-16">
               <div className="flex flex-col items-center text-center">
                 <div className="flex items-center justify-center gap-8">
                   <div className="flex h-36 w-36 items-center justify-center overflow-hidden drop-shadow-xl">
@@ -103,7 +103,7 @@ function LandingPage() {
                 <div className="mt-10">
                   <Link
                     to="/register/form"
-                    className="inline-flex h-14 items-center gap-3 rounded-2xl bg-blue-600 px-10 text-lg font-semibold text-white shadow-[0_8px_32px_rgba(59,130,246,0.4)] transition-all hover:bg-blue-500 hover:shadow-[0_12px_40px_rgba(59,130,246,0.5)] active:scale-[0.98] whitespace-nowrap"
+                    className="inline-flex h-14 items-center justify-center gap-2 sm:gap-3 rounded-2xl bg-blue-600 px-6 sm:px-10 text-base sm:text-lg font-semibold text-white shadow-[0_8px_32px_rgba(59,130,246,0.4)] transition-all hover:bg-blue-500 hover:shadow-[0_12px_40px_rgba(59,130,246,0.5)] active:scale-[0.98] whitespace-nowrap"
                   >
                     {t("landing_cta")}
                     <ArrowRight className="h-5 w-5" />

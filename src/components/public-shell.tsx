@@ -43,7 +43,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
   return (
     <PremiumBackground className="flex min-h-screen flex-col">
       <header className="glass-header sticky top-0 z-30">
-        <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between gap-3 px-4 sm:px-5 lg:px-8">
+        <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between gap-3 px-3 sm:px-5 lg:px-8">
           <Link to="/register" className="flex min-w-0 items-center gap-2.5">
             <img
               src="/logo.png"
@@ -59,7 +59,7 @@ export function PublicShell({ children }: { children: ReactNode }) {
       </header>
       <main className="flex min-h-0 flex-1 flex-col">{children}</main>
       <footer className="px-4 pb-6 sm:px-5 lg:px-8">
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 border-t border-blue-100/70 pt-4 text-xs text-slate-500">
+        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 border-t border-blue-100/70 pt-4 text-[10px] sm:text-xs text-slate-500">
           <span className="font-medium">{t("portal_title")}</span>
           <img
             src="/emblem.png"

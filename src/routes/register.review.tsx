@@ -133,7 +133,7 @@ function ReviewPage() {
         </div>
       </header>
 
-      <div className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-[1600px] flex-col px-4 py-5 sm:px-5 lg:px-8 lg:py-8">
+      <div className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-[1600px] flex-col px-3 py-5 sm:px-5 lg:px-8 lg:py-8">
         <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col">
           <div className="mb-6 text-center lg:mb-8">
             <h1 className="font-heading text-2xl font-bold text-primary-navy drop-shadow-sm sm:text-3xl">
@@ -142,7 +142,7 @@ function ReviewPage() {
             <p className="mt-2 text-sm text-slate-600">{t("review_sub")}</p>
           </div>
 
-          <div className="flex flex-1 flex-col rounded-xl border border-white/30 bg-white/75 p-5 shadow-[0_24px_70px_rgba(21,94,239,0.08)] backdrop-blur-2xl sm:p-6 lg:p-8">
+          <div className="flex flex-1 flex-col rounded-xl border border-white/30 bg-white/75 p-4 shadow-[0_24px_70px_rgba(21,94,239,0.08)] backdrop-blur-2xl sm:p-6 lg:p-8">
             <div className="min-h-0 flex-1 space-y-4 overflow-y-auto">
               <InfoCard title={t("sec_personal_info")}>
                 <Row label={t("f_fullname")} value={d.fullName} />
@@ -176,14 +176,14 @@ function ReviewPage() {
             </div>
 
             <div className="mt-6 flex shrink-0 flex-col-reverse gap-3 border-t border-primary/10 pt-6 sm:flex-row sm:justify-between">
-              <Link to="/register/form" className="btn-secondary w-full sm:w-auto whitespace-nowrap">
+              <Link to="/register/form" className="btn-secondary w-full sm:w-auto px-4 sm:px-6 whitespace-nowrap">
                 <ArrowLeft className="h-4 w-4" />
                 {t("btn_edit")}
               </Link>
               <button
                 onClick={submit}
                 disabled={submitting}
-                className="btn-primary w-full sm:w-auto disabled:opacity-70 whitespace-nowrap"
+                className="btn-primary w-full sm:w-auto px-4 sm:px-6 disabled:opacity-70 whitespace-nowrap"
               >
                 {submitting ? (
                   <>

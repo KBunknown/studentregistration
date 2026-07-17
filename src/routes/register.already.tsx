@@ -71,7 +71,7 @@ function Already() {
   return (
     <div className="mesh-gradient-bg relative min-h-screen">
       <header className="sticky top-0 z-30 border-b border-white/20 bg-white/70 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between gap-3 px-4 sm:px-5 lg:px-8">
+        <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between gap-3 px-3 sm:px-5 lg:px-8">
           <Link to="/register" className="flex min-w-0 items-center gap-2.5">
             <img
               src="/logo.png"
@@ -95,7 +95,7 @@ function Already() {
 
         <form
           onSubmit={lookup}
-          className="grid gap-5 rounded-xl border border-white/30 bg-white/20 p-6 shadow-[0_24px_70px_rgba(21,94,239,0.08)] backdrop-blur-2xl sm:p-8"
+          className="grid gap-5 rounded-xl border border-white/30 bg-white/20 p-4 shadow-[0_24px_70px_rgba(21,94,239,0.08)] backdrop-blur-2xl sm:p-8"
         >
           <label className="grid gap-1.5">
             <span className="text-sm font-medium text-foreground">{t("f_index")}</span>
@@ -118,7 +118,7 @@ function Already() {
               required
             />
           </label>
-          <button className="btn-primary mt-2" disabled={searching}>
+          <button className="btn-primary mt-2 px-4 sm:px-6" disabled={searching}>
             <Search className="h-4 w-4" /> {searching ? "Searching..." : t("already_lookup")}
           </button>
         </form>
