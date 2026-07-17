@@ -93,14 +93,17 @@ function Already() {
           <p className="mt-2 text-sm text-slate-600">{t("already_sub")}</p>
         </div>
 
-        <form onSubmit={lookup} className="grid gap-5 rounded-xl border border-white/30 bg-white/75 p-6 shadow-[0_24px_70px_rgba(21,94,239,0.08)] backdrop-blur-2xl sm:p-8">
+        <form
+          onSubmit={lookup}
+          className="grid gap-5 rounded-xl border border-white/30 bg-white/75 p-6 shadow-[0_24px_70px_rgba(21,94,239,0.08)] backdrop-blur-2xl sm:p-8"
+        >
           <label className="grid gap-1.5">
             <span className="text-sm font-medium text-foreground">{t("f_index")}</span>
             <input
               className="form-input"
               value={index}
               onChange={(e) => setIndex(e.target.value)}
-              placeholder="e.g. 9012345"
+              placeholder="e.g. 9012345 or REF-123"
               required
             />
           </label>

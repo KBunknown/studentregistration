@@ -61,7 +61,7 @@ export const dict = {
     fr: "Rechercher et sélectionner votre programme",
   },
   f_other_program: { en: "Enter your BSc program", fr: "Entrez votre programme de licence" },
-  f_index: { en: "Index number", fr: "Numéro d'index" },
+  f_index: { en: "Index number / Reference number", fr: "Numéro d'index / Numéro de référence" },
   f_level: { en: "Current level", fr: "Niveau actuel" },
   f_grad_year: { en: "Expected graduation year", fr: "Année de fin d'études prévue" },
   f_consent: {
@@ -96,8 +96,8 @@ export const dict = {
 
   already_title: { en: "Already registered?", fr: "Déjà inscrit ?" },
   already_sub: {
-    en: "Enter your index number and email to view or update your registration.",
-    fr: "Entrez votre numéro d'index et votre e-mail pour consulter ou mettre à jour votre inscription.",
+    en: "Enter your index or reference number and email to view or update your registration.",
+    fr: "Entrez votre numéro d'index ou de référence et votre e-mail pour consulter ou mettre à jour votre inscription.",
   },
   already_lookup: { en: "Look up my registration", fr: "Consulter mon inscription" },
   already_none: {

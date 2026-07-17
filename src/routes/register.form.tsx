@@ -591,7 +591,7 @@ function RegisterForm() {
                       className={cn(inputCls, errors.index && "border-destructive")}
                       value={d.index ?? ""}
                       onChange={(e) => set("index", e.target.value)}
-                      placeholder="e.g. 9012345"
+                      placeholder="e.g. 9012345 or REF-123"
                     />
                   </Field>
                   <Field label={t("f_level")} required error={errors.level}>
