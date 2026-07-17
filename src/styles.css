@@ -75,8 +75,8 @@
   --background: #f4f8ff;
   --border: rgba(191, 219, 254, 0.72);
   --input: #bfdbfe;
-  --glass-bg: rgba(255, 255, 255, 0.8);
-  --glass-bg-mobile: rgba(255, 255, 255, 0.92);
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-bg-mobile: rgba(255, 255, 255, 0.75);
   --glass-border: rgba(191, 219, 254, 0.72);
   --glass-shadow: 0 24px 70px rgba(21, 94, 239, 0.1);
   --glass-blur: blur(24px) saturate(135%);
@@ -192,7 +192,7 @@ body {
 
 .glass-panel,
 .shadow-card {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(24px) saturate(135%);
   -webkit-backdrop-filter: blur(24px) saturate(135%);
   border-color: rgba(191, 219, 254, 0.72);
@@ -525,8 +525,8 @@ body {
 .mesh-gradient-bg {
   background:
     radial-gradient(ellipse 80% 60% at 10% 20%, rgba(59, 130, 246, 0.12) 0%, transparent 55%),
-    radial-gradient(ellipse 70% 50% at 90% 80%, rgba(37, 99, 235, 0.10) 0%, transparent 50%),
-    radial-gradient(ellipse 50% 40% at 70% 10%, rgba(147, 197, 253, 0.20) 0%, transparent 45%),
+    radial-gradient(ellipse 70% 50% at 90% 80%, rgba(37, 99, 235, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 40% at 70% 10%, rgba(147, 197, 253, 0.2) 0%, transparent 45%),
     radial-gradient(ellipse 60% 45% at 30% 90%, rgba(191, 219, 254, 0.25) 0%, transparent 50%),
     radial-gradient(ellipse 40% 35% at 50% 50%, rgba(219, 234, 254, 0.15) 0%, transparent 40%),
     linear-gradient(160deg, #f8fbff 0%, #eff6ff 35%, #f0f7ff 65%, #f8fbff 100%);

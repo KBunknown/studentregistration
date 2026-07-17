@@ -407,7 +407,7 @@ function RegisterForm() {
 
   return (
     <div className="mesh-gradient-bg relative min-h-screen">
-      <header className="sticky top-0 z-30 border-b border-white/20 bg-white/70 backdrop-blur-xl">
+      <header className="sticky top-0 z-30 border-b border-white/20 bg-white/50 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between gap-3 px-4 sm:px-5 lg:px-8">
           <Link to="/register" className="flex min-w-0 items-center gap-2.5">
             <img
@@ -434,19 +434,19 @@ function RegisterForm() {
             {t("form_sub")}
           </p>
           <div className="mt-6 hidden flex-col gap-3 lg:flex">
-            <div className="rounded-lg border border-blue-100/60 bg-white/70 px-4 py-3 backdrop-blur-sm">
+            <div className="rounded-lg border border-blue-100/60 bg-white/50 px-4 py-3 backdrop-blur-sm">
               <p className="text-xs font-semibold uppercase tracking-wider text-primary-deep">
                 Personal
               </p>
               <p className="mt-1 text-sm text-muted-foreground">Name, email, gender</p>
             </div>
-            <div className="rounded-lg border border-blue-100/60 bg-white/70 px-4 py-3 backdrop-blur-sm">
+            <div className="rounded-lg border border-blue-100/60 bg-white/50 px-4 py-3 backdrop-blur-sm">
               <p className="text-xs font-semibold uppercase tracking-wider text-primary-deep">
                 Contact
               </p>
               <p className="mt-1 text-sm text-muted-foreground">Country, phone, WhatsApp</p>
             </div>
-            <div className="rounded-lg border border-blue-100/60 bg-white/70 px-4 py-3 backdrop-blur-sm">
+            <div className="rounded-lg border border-blue-100/60 bg-white/50 px-4 py-3 backdrop-blur-sm">
               <p className="text-xs font-semibold uppercase tracking-wider text-primary-deep">
                 Academic
               </p>
@@ -465,7 +465,7 @@ function RegisterForm() {
 
           <form
             onSubmit={onReview}
-            className="flex min-h-0 flex-1 flex-col rounded-xl border border-white/30 bg-white/75 p-5 shadow-[0_24px_70px_rgba(21,94,239,0.08)] backdrop-blur-2xl sm:p-6 lg:p-8"
+            className="flex min-h-0 flex-1 flex-col rounded-xl border border-white/30 bg-white/60 p-5 shadow-[0_24px_70px_rgba(21,94,239,0.08)] backdrop-blur-2xl sm:p-6 lg:p-8"
           >
             <div className="min-h-0 flex-1 overflow-y-auto">
               <section className="mb-8">
