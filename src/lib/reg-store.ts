@@ -96,8 +96,14 @@ export async function checkAdminSession(): Promise<boolean> {
     .eq("email", email)
     .maybeSingle();
     
-  if (error || !data) {
-    // Unauthorized! Nuke the session.
+  if (error) {
+    console.error("Admin check failed:", error);
+    // Do not nuke the session on network errors, just return false
+    return false;
+  }
+  
+  if (!data) {
+    // Successfully queried, but no matching admin found. Unauthorized!
     await supabase.auth.signOut();
     return false;
   }
