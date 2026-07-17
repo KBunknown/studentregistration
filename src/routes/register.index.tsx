@@ -103,7 +103,7 @@ function LandingPage() {
                 <div className="mt-10">
                   <Link
                     to="/register/form"
-                    className="inline-flex h-14 items-center gap-3 rounded-2xl bg-blue-600 px-10 text-lg font-semibold text-white shadow-[0_8px_32px_rgba(59,130,246,0.4)] transition-all hover:bg-blue-500 hover:shadow-[0_12px_40px_rgba(59,130,246,0.5)] active:scale-[0.98]"
+                    className="inline-flex h-14 items-center gap-3 rounded-2xl bg-blue-600 px-10 text-lg font-semibold text-white shadow-[0_8px_32px_rgba(59,130,246,0.4)] transition-all hover:bg-blue-500 hover:shadow-[0_12px_40px_rgba(59,130,246,0.5)] active:scale-[0.98] whitespace-nowrap"
                   >
                     {t("landing_cta")}
                     <ArrowRight className="h-5 w-5" />

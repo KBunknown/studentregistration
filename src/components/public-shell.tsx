@@ -22,7 +22,7 @@ function LangSelector() {
           className="h-11 rounded-xl border-blue-100 bg-white/80 px-3 shadow-sm backdrop-blur-xl hover:bg-blue-50 focus-visible:ring-2 focus-visible:ring-blue-500/20"
         >
           <Languages className="mr-2 h-4 w-4 text-blue-600" />
-          <span>{lang === "en" ? "EN  English" : "FR  Français"}</span>
+          <span className="whitespace-nowrap">{lang === "en" ? "EN  English" : "FR  Français"}</span>
           <ChevronDown className="ml-2 h-4 w-4 text-slate-500" />
         </Button>
       </DropdownMenuTrigger>

@@ -276,7 +276,7 @@ function LangSelector() {
           className="h-9 rounded-lg border-blue-100 bg-white/80 px-2.5 text-xs shadow-sm backdrop-blur-xl hover:bg-blue-50"
         >
           <Languages className="mr-1.5 h-3.5 w-3.5 text-blue-600" />
-          <span>{lang === "en" ? "EN" : "FR"}</span>
+          <span className="whitespace-nowrap">{lang === "en" ? "EN" : "FR"}</span>
           <ChevronDown className="ml-1 h-3 w-3 text-slate-500" />
         </Button>
       </DropdownMenuTrigger>
@@ -645,7 +645,7 @@ function RegisterForm() {
             </div>
 
             <div className="mt-6 shrink-0 border-t border-primary/10 pt-6">
-              <button type="submit" className="btn-primary w-full sm:ml-auto sm:w-auto">
+              <button type="submit" className="btn-primary w-full sm:ml-auto sm:w-auto whitespace-nowrap">
                 {t("btn_review")}
               </button>
             </div>

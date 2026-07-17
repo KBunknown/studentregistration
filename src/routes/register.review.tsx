@@ -176,14 +176,14 @@ function ReviewPage() {
             </div>
 
             <div className="mt-6 flex shrink-0 flex-col-reverse gap-3 border-t border-primary/10 pt-6 sm:flex-row sm:justify-between">
-              <Link to="/register/form" className="btn-secondary w-full sm:w-auto">
+              <Link to="/register/form" className="btn-secondary w-full sm:w-auto whitespace-nowrap">
                 <ArrowLeft className="h-4 w-4" />
                 {t("btn_edit")}
               </Link>
               <button
                 onClick={submit}
                 disabled={submitting}
-                className="btn-primary w-full sm:w-auto disabled:opacity-70"
+                className="btn-primary w-full sm:w-auto disabled:opacity-70 whitespace-nowrap"
               >
                 {submitting ? (
                   <>
