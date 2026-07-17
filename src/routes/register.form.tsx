@@ -293,27 +293,21 @@ function PhoneRow({
           "border-destructive focus-within:border-destructive focus-within:ring-destructive/10",
       )}
     >
-      <select
-        aria-label={codeLabel}
-        value={code}
-        disabled={disabled}
-        onChange={(e) => {
-          onCode(e.target.value);
-        }}
-        className="h-full w-[85px] shrink-0 cursor-pointer appearance-none bg-transparent pl-2 pr-6 text-sm font-medium text-foreground outline-none"
-        style={{
-          backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%23526174" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>')`,
-          backgroundPosition: "right 6px center",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
-        <option value="">+—</option>
-        {[...new Set(COUNTRIES.map((c) => c.code))].map((c) => (
-          <option key={c} value={c}>
-            {c}
-          </option>
-        ))}
-      </select>
+      <Select value={code} onValueChange={onCode} disabled={disabled}>
+        <SelectTrigger
+          aria-label={codeLabel}
+          className="!h-full !w-[85px] shrink-0 !border-0 !bg-transparent !px-2 !shadow-none !rounded-none focus:!ring-0 hover:!bg-transparent text-sm font-medium"
+        >
+          <SelectValue placeholder="+—" />
+        </SelectTrigger>
+        <SelectContent>
+          {[...new Set(COUNTRIES.map((c) => c.code))].map((c) => (
+            <SelectItem key={c} value={c}>
+              {c}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
 
       <div className="h-5 w-[1px] shrink-0 bg-blue-200/60" />
 
