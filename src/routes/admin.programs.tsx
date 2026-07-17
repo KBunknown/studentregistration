@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Trash2, Pencil, BookOpen } from "lucide-react";
 import { toast } from "sonner";
 import { AdminShell } from "@/components/admin-shell";
-import { PROGRAMS } from "@/lib/mock-data";
+import { PROGRAMS, type Registration } from "@/lib/mock-data";
+import { getAllRegistrations } from "@/lib/reg-store";
 
 export const Route = createFileRoute("/admin/programs")({
   component: Programs,
@@ -12,6 +13,11 @@ export const Route = createFileRoute("/admin/programs")({
 function Programs() {
   const [list, setList] = useState<string[]>(PROGRAMS.filter((p) => p !== "Other Program"));
   const [adding, setAdding] = useState("");
+  const [regs, setRegs] = useState<Registration[]>([]);
+
+  useEffect(() => {
+    getAllRegistrations().then(setRegs);
+  }, []);
 
   const add = () => {
     if (!adding.trim()) return;
@@ -57,7 +63,12 @@ function Programs() {
                 <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-primary-soft text-primary-deep">
                   <BookOpen className="h-5 w-5" />
                 </span>
-                <span className="truncate text-sm font-semibold text-foreground">{p}</span>
+                <div className="flex flex-col min-w-0">
+                  <span className="truncate text-sm font-semibold text-foreground">{p}</span>
+                  <span className="text-xs text-muted-foreground font-medium">
+                    {regs.filter((r) => r.program === p).length} enrolled
+                  </span>
+                </div>
               </div>
               <div className="flex items-center gap-1">
                 <button

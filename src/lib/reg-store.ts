@@ -1,4 +1,4 @@
-import { MOCK_REGISTRATIONS, type Registration } from "./mock-data";
+import { type Registration } from "./mock-data";
 import { supabase } from "./supabase";
 
 // Draft used across the multi-step registration flow (client-only prototype).
@@ -30,9 +30,9 @@ export async function getAllRegistrations(): Promise<Registration[]> {
     .select("*")
     .order("registrationDate", { ascending: false });
     
-  if (error) {
+  if (error || !data) {
     console.error("Error fetching registrations:", error);
-    return MOCK_REGISTRATIONS; // fallback for preview/demo mode if DB not set up
+    return [];
   }
   return data as Registration[];
 }

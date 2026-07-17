@@ -26,8 +26,6 @@ import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminGraduatedRouteImport } from './routes/admin.graduated'
 import { Route as AdminExportsRouteImport } from './routes/admin.exports'
 import { Route as AdminDuplicatesRouteImport } from './routes/admin.duplicates'
-import { Route as AdminAuditRouteImport } from './routes/admin.audit'
-import { Route as AdminAdminsRouteImport } from './routes/admin.admins'
 import { Route as AdminStudentsIdRouteImport } from './routes/admin.students.$id'
 import { Route as AdminStudentsIdEditRouteImport } from './routes/admin.students.$id.edit'
 
@@ -116,16 +114,6 @@ const AdminDuplicatesRoute = AdminDuplicatesRouteImport.update({
   path: '/duplicates',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminAuditRoute = AdminAuditRouteImport.update({
-  id: '/audit',
-  path: '/audit',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminAdminsRoute = AdminAdminsRouteImport.update({
-  id: '/admins',
-  path: '/admins',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminStudentsIdRoute = AdminStudentsIdRouteImport.update({
   id: '/students/$id',
   path: '/students/$id',
@@ -142,8 +130,6 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRouteWithChildren
-  '/admin/admins': typeof AdminAdminsRoute
-  '/admin/audit': typeof AdminAuditRoute
   '/admin/duplicates': typeof AdminDuplicatesRoute
   '/admin/exports': typeof AdminExportsRoute
   '/admin/graduated': typeof AdminGraduatedRoute
@@ -163,8 +149,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/privacy': typeof PrivacyRoute
-  '/admin/admins': typeof AdminAdminsRoute
-  '/admin/audit': typeof AdminAuditRoute
   '/admin/duplicates': typeof AdminDuplicatesRoute
   '/admin/exports': typeof AdminExportsRoute
   '/admin/graduated': typeof AdminGraduatedRoute
@@ -187,8 +171,6 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/privacy': typeof PrivacyRoute
   '/register': typeof RegisterRouteWithChildren
-  '/admin/admins': typeof AdminAdminsRoute
-  '/admin/audit': typeof AdminAuditRoute
   '/admin/duplicates': typeof AdminDuplicatesRoute
   '/admin/exports': typeof AdminExportsRoute
   '/admin/graduated': typeof AdminGraduatedRoute
@@ -212,8 +194,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/privacy'
     | '/register'
-    | '/admin/admins'
-    | '/admin/audit'
     | '/admin/duplicates'
     | '/admin/exports'
     | '/admin/graduated'
@@ -233,8 +213,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/privacy'
-    | '/admin/admins'
-    | '/admin/audit'
     | '/admin/duplicates'
     | '/admin/exports'
     | '/admin/graduated'
@@ -256,8 +234,6 @@ export interface FileRouteTypes {
     | '/admin'
     | '/privacy'
     | '/register'
-    | '/admin/admins'
-    | '/admin/audit'
     | '/admin/duplicates'
     | '/admin/exports'
     | '/admin/graduated'
@@ -403,20 +379,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDuplicatesRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/audit': {
-      id: '/admin/audit'
-      path: '/audit'
-      fullPath: '/admin/audit'
-      preLoaderRoute: typeof AdminAuditRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/admins': {
-      id: '/admin/admins'
-      path: '/admins'
-      fullPath: '/admin/admins'
-      preLoaderRoute: typeof AdminAdminsRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/students/$id': {
       id: '/admin/students/$id'
       path: '/students/$id'
@@ -447,8 +409,6 @@ const AdminStudentsIdRouteWithChildren = AdminStudentsIdRoute._addFileChildren(
 )
 
 interface AdminRouteChildren {
-  AdminAdminsRoute: typeof AdminAdminsRoute
-  AdminAuditRoute: typeof AdminAuditRoute
   AdminDuplicatesRoute: typeof AdminDuplicatesRoute
   AdminExportsRoute: typeof AdminExportsRoute
   AdminGraduatedRoute: typeof AdminGraduatedRoute
@@ -461,8 +421,6 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
-  AdminAdminsRoute: AdminAdminsRoute,
-  AdminAuditRoute: AdminAuditRoute,
   AdminDuplicatesRoute: AdminDuplicatesRoute,
   AdminExportsRoute: AdminExportsRoute,
   AdminGraduatedRoute: AdminGraduatedRoute,

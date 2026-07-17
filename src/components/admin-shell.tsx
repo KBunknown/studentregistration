@@ -35,9 +35,7 @@ const NAV_GROUPS = [
     label: "ADMINISTRATION",
     items: [
       { to: "/admin/programs", label: "Programmes", icon: BookOpen },
-      { to: "/admin/admins", label: "Super Admins", icon: ShieldCheck },
       { to: "/admin/exports", label: "Exports", icon: Download },
-      { to: "/admin/audit", label: "Audit Log", icon: FileClock },
       { to: "/admin/settings", label: "Settings", icon: Settings },
     ],
   },

@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { AlertTriangle, Check, X } from "lucide-react";
 import { toast } from "sonner";
 import { AdminShell } from "@/components/admin-shell";
-import { getAllRegistrations } from "@/lib/reg-store";
+import { getAllRegistrations, deleteRegistration } from "@/lib/reg-store";
 import type { Registration } from "@/lib/mock-data";
 
 export const Route = createFileRoute("/admin/duplicates")({
@@ -12,11 +12,40 @@ export const Route = createFileRoute("/admin/duplicates")({
 
 function Duplicates() {
   const [regs, setRegs] = useState<Registration[]>([]);
+  const fetch = () => getAllRegistrations().then(setRegs);
+
   useEffect(() => {
-    getAllRegistrations().then(setRegs);
+    fetch();
   }, []);
 
-  const dupes = regs.filter((r) => r.duplicateOf);
+  const dupes = useMemo(() => {
+    const pairs: [Registration, Registration][] = [];
+    const seen = new Map<string, Registration>();
+    for (const r of regs) {
+      const email = r.email.toLowerCase().trim();
+      if (seen.has(email)) {
+        pairs.push([seen.get(email)!, r]);
+      } else {
+        seen.set(email, r);
+      }
+    }
+    return pairs;
+  }, [regs]);
+
+  const handleKeep = async (keepId: string, deleteId: string) => {
+    try {
+      await deleteRegistration(deleteId);
+      toast.success("Duplicate resolved successfully");
+      fetch();
+    } catch {
+      toast.error("Failed to delete record");
+    }
+  };
+
+  const handleIgnore = (email: string) => {
+    // In a real system, we'd add it to an ignore list. For now, we just toast.
+    toast.success("Marked as unique");
+  };
 
   if (dupes.length === 0) {
     return (
@@ -42,16 +71,14 @@ function Duplicates() {
         Compare records that share similar details. Confirm which should be kept.
       </p>
       <div className="mt-6 grid gap-6">
-        {dupes.map((r) => {
-          const other = regs.find((x) => x.id === r.duplicateOf);
-          if (!other) return null;
+        {dupes.map(([r1, r2]) => {
           return (
-            <div key={r.id} className="glass-panel rounded-xl border border-warning/30 p-6">
+            <div key={r1.id + r2.id} className="glass-panel rounded-xl border border-warning/30 p-6">
               <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-warning/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-warning">
-                <AlertTriangle className="h-4 w-4" /> Possible duplicate detected
+                <AlertTriangle className="h-4 w-4" /> Possible duplicate detected (Matching Email)
               </div>
               <div className="grid gap-5 md:grid-cols-2">
-                {[r, other].map((rec, i) => (
+                {[r1, r2].map((rec, i) => (
                   <div key={i} className="rounded-xl border border-border bg-muted/30 p-5">
                     <div className="flex items-center justify-between border-b border-border pb-3">
                       <p className="font-heading text-sm font-bold text-primary-deep">
@@ -95,19 +122,19 @@ function Duplicates() {
               </div>
               <div className="mt-6 flex flex-wrap gap-3 border-t border-border pt-5">
                 <button
-                  onClick={() => toast.success("Marked as unique")}
+                  onClick={() => handleIgnore(r1.email)}
                   className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border bg-white px-4 text-sm font-medium transition-colors hover:bg-muted"
                 >
                   <X className="h-4 w-4" /> Not a duplicate
                 </button>
                 <button
-                  onClick={() => toast.success("Kept Record 1, removed Record 2")}
+                  onClick={() => handleKeep(r1.id, r2.id)}
                   className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-deep"
                 >
                   Keep Record 1
                 </button>
                 <button
-                  onClick={() => toast.success("Kept Record 2, removed Record 1")}
+                  onClick={() => handleKeep(r2.id, r1.id)}
                   className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-deep"
                 >
                   Keep Record 2
