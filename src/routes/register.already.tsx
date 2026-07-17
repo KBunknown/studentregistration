@@ -56,7 +56,8 @@ function Already() {
           });
         }
       } else {
-        const match = getAllRegistrations().find(
+      const regs = await getAllRegistrations();
+      const match = regs.find(
           (r) => r.index === index.trim() && r.email.toLowerCase() === email.trim().toLowerCase(),
         );
         setResult(match ?? "none");

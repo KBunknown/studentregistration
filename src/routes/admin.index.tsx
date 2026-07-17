@@ -94,7 +94,9 @@ function ChartCard({ title, children }: { title: string; children: React.ReactNo
 
 function Dashboard() {
   const [regs, setRegs] = useState<Registration[]>([]);
-  useEffect(() => setRegs(getAllRegistrations()), []);
+  useEffect(() => {
+    getAllRegistrations().then(setRegs);
+  }, []);
 
   const stats = useMemo(() => {
     const today = new Date().toDateString();

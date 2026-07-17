@@ -11,7 +11,9 @@ export const Route = createFileRoute("/admin/graduated")({
 
 function Graduated() {
   const [regs, setRegs] = useState<Registration[]>([]);
-  useEffect(() => setRegs(getAllRegistrations()), []);
+  useEffect(() => {
+    getAllRegistrations().then(setRegs);
+  }, []);
   const list = regs.filter((r) => r.graduated);
 
   return (

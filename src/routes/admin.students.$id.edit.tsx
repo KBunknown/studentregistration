@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { AdminShell } from "@/components/admin-shell";
-import { getAllRegistrations } from "@/lib/reg-store";
+import { getAllRegistrations, updateRegistration } from "@/lib/reg-store";
 import {
   LEVELS,
   PROGRAMS,
@@ -58,8 +58,10 @@ function EditStudent() {
   const [r, setR] = useState<Registration | null>(null);
 
   useEffect(() => {
-    const found = getAllRegistrations().find((x) => x.id === id);
-    setR(found ?? null);
+    getAllRegistrations().then((regs) => {
+      const found = regs.find((x) => x.id === id);
+      setR(found ?? null);
+    });
   }, [id]);
 
   if (!r)
@@ -77,10 +79,16 @@ function EditStudent() {
       return next;
     });
 
-  const save = (e: React.FormEvent) => {
+  const save = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Student updated successfully");
-    navigate({ to: "/admin/students/$id", params: { id: r.id } });
+    if (!r) return;
+    try {
+      await updateRegistration(r.id, r);
+      toast.success("Student updated successfully");
+      navigate({ to: "/admin/students/$id", params: { id: r.id } });
+    } catch (err) {
+      toast.error("Failed to update student");
+    }
   };
 
   return (

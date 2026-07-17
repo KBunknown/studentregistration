@@ -111,7 +111,9 @@ function RegistrationsPage() {
   });
   const [sort, setSort] = useState<SortKey>("newest");
 
-  useEffect(() => setRegs(getAllRegistrations()), []);
+  useEffect(() => {
+    getAllRegistrations().then(setRegs);
+  }, []);
 
   const filtered = useMemo(() => {
     let out = regs;

@@ -24,8 +24,10 @@ function StudentProfile() {
   const { id } = useParams({ from: "/admin/students/$id" });
   const [r, setR] = useState<Registration | null | undefined>(undefined);
   useEffect(() => {
-    const found = getAllRegistrations().find((x) => x.id === id);
-    setR(found ?? null);
+    getAllRegistrations().then((regs) => {
+      const found = regs.find((x) => x.id === id);
+      setR(found ?? null);
+    });
   }, [id]);
 
   if (r === undefined)

@@ -1,10 +1,10 @@
 import { MOCK_REGISTRATIONS, type Registration } from "./mock-data";
+import { supabase } from "./supabase";
 
 // Draft used across the multi-step registration flow (client-only prototype).
 export type Draft = Partial<Registration> & { otherProgram?: string };
 
 const DRAFT_KEY = "isrp_draft";
-const REGS_KEY = "isrp_registrations";
 const AUTH_KEY = "isrp_admin_auth";
 
 export function getDraft(): Draft {
@@ -24,22 +24,32 @@ export function clearDraft() {
   localStorage.removeItem(DRAFT_KEY);
 }
 
-export function getAllRegistrations(): Registration[] {
-  if (typeof window === "undefined") return MOCK_REGISTRATIONS;
-  try {
-    const stored = localStorage.getItem(REGS_KEY);
-    if (stored) return JSON.parse(stored);
-  } catch {
-    // ignore
+export async function getAllRegistrations(): Promise<Registration[]> {
+  const { data, error } = await supabase
+    .from("registrations")
+    .select("*")
+    .order("registrationDate", { ascending: false });
+    
+  if (error) {
+    console.error("Error fetching registrations:", error);
+    return MOCK_REGISTRATIONS; // fallback for preview/demo mode if DB not set up
   }
-  return MOCK_REGISTRATIONS;
+  return data as Registration[];
 }
 
-export function addRegistration(r: Registration) {
-  if (typeof window === "undefined") return;
-  const all = getAllRegistrations();
-  const next = [r, ...all];
-  localStorage.setItem(REGS_KEY, JSON.stringify(next));
+export async function addRegistration(r: Registration) {
+  const { error } = await supabase.from("registrations").insert(r);
+  if (error) throw error;
+}
+
+export async function updateRegistration(id: string, updates: Partial<Registration>) {
+  const { error } = await supabase.from("registrations").update(updates).eq("id", id);
+  if (error) throw error;
+}
+
+export async function deleteRegistration(id: string) {
+  const { error } = await supabase.from("registrations").delete().eq("id", id);
+  if (error) throw error;
 }
 
 export function isAdmin(): boolean {

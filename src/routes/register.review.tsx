@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { ArrowLeft, Send } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { addRegistration, clearDraft, getDraft, type Draft } from "@/lib/reg-store";
-import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import type { Registration } from "@/lib/mock-data";
 
 export const Route = createFileRoute("/register/review")({
@@ -73,32 +72,13 @@ function ReviewPage() {
       registrationDate: new Date().toISOString(),
     };
 
-    if (isSupabaseConfigured && supabase) {
-      const { error } = await supabase.from("students").insert(
-        {
-          full_name: reg.fullName,
-          email: reg.email,
-          gender: reg.gender,
-          country: reg.country,
-          phone_code: reg.phoneCode,
-          phone: reg.phone,
-          whatsapp_code: reg.whatsappCode,
-          whatsapp: reg.whatsapp,
-          same_whatsapp: reg.sameWhatsapp,
-          program: reg.program,
-          other_program: reg.otherProgram || null,
-          index_number: reg.index,
-          level: reg.level,
-          graduation_year: reg.graduationYear,
-        },
-        { returning: "minimal" },
-      );
-      if (error) {
-        console.error("Supabase insert error, falling back to localStorage:", error);
-        addRegistration(reg);
-      }
-    } else {
-      addRegistration(reg);
+    try {
+      await addRegistration(reg);
+    } catch (err) {
+      console.error("Insert error:", err);
+      toast.error("Registration failed. Please try again.");
+      setSubmitting(false);
+      return;
     }
 
     if (typeof window !== "undefined") {

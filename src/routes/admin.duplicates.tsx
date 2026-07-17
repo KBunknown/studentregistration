@@ -12,7 +12,9 @@ export const Route = createFileRoute("/admin/duplicates")({
 
 function Duplicates() {
   const [regs, setRegs] = useState<Registration[]>([]);
-  useEffect(() => setRegs(getAllRegistrations()), []);
+  useEffect(() => {
+    getAllRegistrations().then(setRegs);
+  }, []);
 
   const dupes = regs.filter((r) => r.duplicateOf);
 

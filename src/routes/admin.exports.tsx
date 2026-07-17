@@ -16,10 +16,11 @@ function ExportsPage() {
   const [scope, setScope] = useState<"all" | "active" | "graduated">("all");
 
   useEffect(() => {
-    const regs = getAllRegistrations();
-    if (scope === "active") setCount(regs.filter((r) => !r.graduated).length);
-    else if (scope === "graduated") setCount(regs.filter((r) => r.graduated).length);
-    else setCount(regs.length);
+    getAllRegistrations().then((regs) => {
+      if (scope === "active") setCount(regs.filter((r) => !r.graduated).length);
+      else if (scope === "graduated") setCount(regs.filter((r) => r.graduated).length);
+      else setCount(regs.length);
+    });
   }, [scope]);
 
   const handleExport = () => {
