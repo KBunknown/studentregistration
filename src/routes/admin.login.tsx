@@ -46,33 +46,36 @@ function Login() {
       return;
     }
     
-    if (isSignUp) {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-      setLoading(false);
-      
-      if (error) {
-        setError(error.message);
-        return;
+    try {
+      if (isSignUp) {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+        });
+        
+        if (error) {
+          setError(error.message);
+          return;
+        }
+        
+        navigate({ to: "/admin" });
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        
+        if (error) {
+          setError(error.message);
+          return;
+        }
+        
+        navigate({ to: "/admin" });
       }
-      
-      // Successfully signed up and automatically logged in!
-      navigate({ to: "/admin" });
-    } else {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+    } catch (err: any) {
+      setError(err?.message || "An unexpected error occurred");
+    } finally {
       setLoading(false);
-      
-      if (error) {
-        setError(error.message);
-        return;
-      }
-      
-      navigate({ to: "/admin" });
     }
   };
 

@@ -45,6 +45,7 @@ function StudentProfile() {
       navigate({ to: "/admin/registrations" });
     } catch (err) {
       toast.error("Failed to delete student record");
+    } finally {
       setIsDeleting(false);
     }
   };
