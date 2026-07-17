@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowLeft, Send } from "lucide-react";
+import { toast } from "sonner";
 import { useI18n } from "@/lib/i18n";
 import { addRegistration, clearDraft, getDraft, type Draft } from "@/lib/reg-store";
 import type { Registration } from "@/lib/mock-data";
@@ -53,7 +54,7 @@ function ReviewPage() {
     setSubmitting(true);
     await new Promise((r) => setTimeout(r, 800));
     const reg: Registration = {
-      id: `reg_${Date.now()}`,
+      id: crypto.randomUUID(),
       fullName: d.fullName!,
       email: d.email!,
       gender: d.gender!,
