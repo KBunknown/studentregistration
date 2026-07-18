@@ -668,7 +668,7 @@ function RegisterForm() {
                             className={cn(inputCls, errors.program && "border-destructive")}
                             value={d.program ?? ""}
                             onChange={(e) => set("program", e.target.value)}
-                            placeholder={d.english_certificate_pathway === "continue_to_bsc" ? "e.g. BSc Mathematics" : "e.g. MSc Public Health"}
+                            placeholder={d.english_certificate_pathway === "continue_to_masters" ? "e.g. MSc Public Health" : "e.g. BSc Computer Science"}
                           />
                         </Field>
                       )}

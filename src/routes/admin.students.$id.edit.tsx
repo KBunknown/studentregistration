@@ -186,7 +186,7 @@ function EditStudent() {
               className={inputCls}
               value={r.program}
               onChange={(e) => upd("program", e.target.value)}
-              placeholder={r.study_type === "masters" ? "e.g. MSc Public Health" : "e.g. BSc Computer Science"}
+              placeholder={(r.study_type === "masters" || r.english_certificate_pathway === "continue_to_masters") ? "e.g. MSc Public Health" : "e.g. BSc Computer Science"}
               required={r.study_type !== "english_certificate"}
             />
           </label>
