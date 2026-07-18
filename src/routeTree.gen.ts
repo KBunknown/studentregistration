@@ -21,7 +21,6 @@ import { Route as RegisterFormRouteImport } from './routes/register.form'
 import { Route as RegisterAlreadyRouteImport } from './routes/register.already'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminRegistrationsRouteImport } from './routes/admin.registrations'
-import { Route as AdminProgramsRouteImport } from './routes/admin.programs'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminGraduatedRouteImport } from './routes/admin.graduated'
 import { Route as AdminExportsRouteImport } from './routes/admin.exports'
@@ -89,11 +88,6 @@ const AdminRegistrationsRoute = AdminRegistrationsRouteImport.update({
   path: '/registrations',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminProgramsRoute = AdminProgramsRouteImport.update({
-  id: '/programs',
-  path: '/programs',
-  getParentRoute: () => AdminRoute,
-} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -134,7 +128,6 @@ export interface FileRoutesByFullPath {
   '/admin/exports': typeof AdminExportsRoute
   '/admin/graduated': typeof AdminGraduatedRoute
   '/admin/login': typeof AdminLoginRoute
-  '/admin/programs': typeof AdminProgramsRoute
   '/admin/registrations': typeof AdminRegistrationsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/register/already': typeof RegisterAlreadyRoute
@@ -153,7 +146,6 @@ export interface FileRoutesByTo {
   '/admin/exports': typeof AdminExportsRoute
   '/admin/graduated': typeof AdminGraduatedRoute
   '/admin/login': typeof AdminLoginRoute
-  '/admin/programs': typeof AdminProgramsRoute
   '/admin/registrations': typeof AdminRegistrationsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/register/already': typeof RegisterAlreadyRoute
@@ -175,7 +167,6 @@ export interface FileRoutesById {
   '/admin/exports': typeof AdminExportsRoute
   '/admin/graduated': typeof AdminGraduatedRoute
   '/admin/login': typeof AdminLoginRoute
-  '/admin/programs': typeof AdminProgramsRoute
   '/admin/registrations': typeof AdminRegistrationsRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/register/already': typeof RegisterAlreadyRoute
@@ -198,7 +189,6 @@ export interface FileRouteTypes {
     | '/admin/exports'
     | '/admin/graduated'
     | '/admin/login'
-    | '/admin/programs'
     | '/admin/registrations'
     | '/admin/settings'
     | '/register/already'
@@ -217,7 +207,6 @@ export interface FileRouteTypes {
     | '/admin/exports'
     | '/admin/graduated'
     | '/admin/login'
-    | '/admin/programs'
     | '/admin/registrations'
     | '/admin/settings'
     | '/register/already'
@@ -238,7 +227,6 @@ export interface FileRouteTypes {
     | '/admin/exports'
     | '/admin/graduated'
     | '/admin/login'
-    | '/admin/programs'
     | '/admin/registrations'
     | '/admin/settings'
     | '/register/already'
@@ -344,13 +332,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRegistrationsRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/programs': {
-      id: '/admin/programs'
-      path: '/programs'
-      fullPath: '/admin/programs'
-      preLoaderRoute: typeof AdminProgramsRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/admin/login': {
       id: '/admin/login'
       path: '/login'
@@ -413,7 +394,6 @@ interface AdminRouteChildren {
   AdminExportsRoute: typeof AdminExportsRoute
   AdminGraduatedRoute: typeof AdminGraduatedRoute
   AdminLoginRoute: typeof AdminLoginRoute
-  AdminProgramsRoute: typeof AdminProgramsRoute
   AdminRegistrationsRoute: typeof AdminRegistrationsRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -425,7 +405,6 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminExportsRoute: AdminExportsRoute,
   AdminGraduatedRoute: AdminGraduatedRoute,
   AdminLoginRoute: AdminLoginRoute,
-  AdminProgramsRoute: AdminProgramsRoute,
   AdminRegistrationsRoute: AdminRegistrationsRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminIndexRoute: AdminIndexRoute,
