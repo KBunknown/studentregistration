@@ -66,6 +66,21 @@ export async function lookupRegistration(index: string, email: string): Promise<
   return data ? ({ index, email } as Registration) : null;
 }
 
+export async function approveEnglishCertificateTransition(
+  studentId: string,
+  newStudyType: string,
+  newAcademicStage: string,
+  newProgrammeName: string
+) {
+  const { error } = await supabase.rpc("approve_english_certificate_transition", {
+    p_student_id: studentId,
+    p_new_study_type: newStudyType,
+    p_new_academic_stage: newAcademicStage,
+    p_new_programme_name: newProgrammeName,
+  });
+  if (error) throw error;
+}
+
 export async function getAdminUsers(): Promise<AdminUser[]> {
   const { data, error } = await supabase.from("admin_users").select("*").order("created_at", { ascending: true });
   if (error) throw error;

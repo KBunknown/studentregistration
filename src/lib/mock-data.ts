@@ -142,13 +142,39 @@ export const CURRENT_YEAR = 2026;
 export function graduationYearFor(level: Level | ""): number | "" {
   if (!level) return "";
   const map: Record<Level, number> = {
-    "Level 100": 2029,
-    "Level 200": 2028,
-    "Level 300": 2027,
-    "Level 400": 2026,
+    "Level 100": CURRENT_YEAR + 3,
+    "Level 200": CURRENT_YEAR + 2,
+    "Level 300": CURRENT_YEAR + 1,
+    "Level 400": CURRENT_YEAR,
   };
   return map[level];
 }
+
+export function calcGraduationYear(stage: AcademicStage | undefined): number | "" {
+  if (!stage) return "";
+  const map: Record<AcademicStage, number> = {
+    "level_100": CURRENT_YEAR + 3,
+    "level_200": CURRENT_YEAR + 2,
+    "level_300": CURRENT_YEAR + 1,
+    "level_400": CURRENT_YEAR,
+    "masters_year_1": CURRENT_YEAR + 1,
+    "masters_year_2": CURRENT_YEAR,
+    "english_certificate_year_1": CURRENT_YEAR,
+  };
+  return map[stage] || "";
+}
+
+export type StudyType = "bsc" | "masters" | "english_certificate";
+export type AcademicStage =
+  | "level_100"
+  | "level_200"
+  | "level_300"
+  | "level_400"
+  | "masters_year_1"
+  | "masters_year_2"
+  | "english_certificate_year_1";
+
+export type EnglishPathway = "leave_after_certificate" | "continue_to_bsc" | "continue_to_masters";
 
 export type Registration = {
   id?: string;
@@ -161,10 +187,20 @@ export type Registration = {
   whatsappCode: string;
   whatsapp: string;
   sameWhatsapp: boolean;
+  
+  // New Academic Structure
+  study_type?: StudyType;
+  academic_stage?: AcademicStage;
+  room_number?: string;
+  english_certificate_pathway?: EnglishPathway | null;
+  programme_status?: string;
+  requires_academic_review?: boolean;
+
+  // Legacy fields (kept for compatibility with old records, though 'level' and 'program' are still used)
   program: string;
   otherProgram?: string;
   index: string;
-  level: Level;
+  level: Level | string; // Relaxed to string for backwards compatibility / dynamic usage
   graduationYear: number;
   graduated: boolean;
   registrationDate: string;

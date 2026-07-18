@@ -118,7 +118,10 @@ function Dashboard() {
     const countries = new Set(regs.map((r) => r.country)).size;
     const programs = new Set(regs.map((r) => r.program)).size;
     const dupes = regs.filter((r) => r.duplicateOf).length;
-    return { total, todayCount, monthCount, weekCount, active, grad, countries, programs, dupes };
+    const bscCount = regs.filter((r) => r.study_type === "bsc").length;
+    const mastersCount = regs.filter((r) => r.study_type === "masters").length;
+    const certCount = regs.filter((r) => r.study_type === "english_certificate").length;
+    return { total, todayCount, monthCount, weekCount, active, grad, countries, programs, dupes, bscCount, mastersCount, certCount };
   }, [regs]);
 
   const byProgram = useMemo(() => {
@@ -139,13 +142,33 @@ function Dashboard() {
       .slice(0, 8);
   }, [regs]);
 
+  const stageLabels: Record<string, string> = {
+    "level_100": "Level 100",
+    "level_200": "Level 200",
+    "level_300": "Level 300",
+    "level_400": "Level 400",
+    "masters_year_1": "Master's Year 1",
+    "masters_year_2": "Master's Year 2",
+    "english_certificate_year_1": "English Cert.",
+  };
+
   const byLevel = useMemo(() => {
     const m = new Map<string, number>();
-    regs.forEach((r) => m.set(r.level, (m.get(r.level) || 0) + 1));
+    regs.forEach((r) => {
+      const stage = r.academic_stage || r.level || "Unknown";
+      const label = stageLabels[stage] || stage;
+      m.set(label, (m.get(label) || 0) + 1);
+    });
     return Array.from(m.entries())
       .map(([name, value]) => ({ name, value }))
       .sort((a, b) => a.name.localeCompare(b.name));
   }, [regs]);
+
+  const byStudyType = [
+    { name: "BSc", value: stats.bscCount },
+    { name: "Master's", value: stats.mastersCount },
+    { name: "English Cert.", value: stats.certCount },
+  ].filter((d) => d.value > 0);
 
   const byMonth = useMemo(() => {
     const m = new Map<string, number>();
@@ -225,7 +248,7 @@ function Dashboard() {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Registrations by level">
+        <ChartCard title="Registrations by academic stage">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -264,12 +287,13 @@ function Dashboard() {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Active vs graduated students">
+        <ChartCard title="Registrations by study type">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
-              <Pie data={activeVsGrad} dataKey="value" nameKey="name" outerRadius={90}>
-                <Cell fill="#155EEF" />
-                <Cell fill="#16875B" />
+              <Pie data={byStudyType} dataKey="value" nameKey="name" outerRadius={90}>
+                {byStudyType.map((_, i) => (
+                  <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                ))}
               </Pie>
               <Tooltip />
               <Legend />

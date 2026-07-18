@@ -42,17 +42,20 @@ function ExportsPage() {
         content = JSON.stringify(filtered, null, 2);
         mimeType = "application/json";
       } else {
-        const headers = ["Index", "Full Name", "Email", "Gender", "Country", "Phone", "WhatsApp", "Program", "Level", "Graduation Year", "Graduated", "Date"];
+        const headers = ["Index", "Full Name", "Email", "Study Type", "Program", "Academic Stage", "Room Number", "Pathway", "Gender", "Country", "Phone", "WhatsApp", "Graduation Year", "Graduated", "Date"];
         const rows = filtered.map(r => [
           r.index,
           r.fullName,
           r.email,
+          r.study_type || "",
+          r.program,
+          r.academic_stage || r.level || "",
+          r.room_number || "",
+          r.english_certificate_pathway || "",
           r.gender || "",
           r.country || "",
           r.phoneCode ? `${r.phoneCode} ${r.phone}` : r.phone || "",
           r.whatsappCode ? `${r.whatsappCode} ${r.whatsapp}` : r.whatsapp || "",
-          r.program === "Other Program" ? r.otherProgram : r.program,
-          r.level || "",
           r.graduationYear || "",
           r.graduated ? "Yes" : "No",
           r.registrationDate

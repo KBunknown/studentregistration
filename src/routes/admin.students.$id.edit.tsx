@@ -7,9 +7,12 @@ import { getAllRegistrations, updateRegistration } from "@/lib/reg-store";
 import {
   LEVELS,
   PROGRAMS,
-  graduationYearFor,
+  calcGraduationYear,
   type Registration,
   type Level,
+  type StudyType,
+  type AcademicStage,
+  type EnglishPathway,
 } from "@/lib/mock-data";
 import {
   Select,
@@ -75,7 +78,16 @@ function EditStudent() {
     setR((prev) => {
       if (!prev) return prev;
       const next = { ...prev, [k]: v };
-      if (k === "level") next.graduationYear = graduationYearFor(v as Level) as number;
+      if (k === "study_type") {
+        next.academic_stage = undefined;
+        next.english_certificate_pathway = null;
+        if (v === "english_certificate") {
+          next.academic_stage = "english_certificate_year_1";
+        }
+      }
+      if (k === "academic_stage" || k === "study_type") {
+        next.graduationYear = calcGraduationYear(next.academic_stage as AcademicStage) as number;
+      }
       return next;
     });
 
@@ -161,11 +173,21 @@ function EditStudent() {
             />
           </label>
           <label className="grid gap-1.5">
-            <span className="text-sm font-medium text-foreground">Program</span>
+            <span className="text-sm font-medium text-foreground">Study Type</span>
             <PremiumSelect
+              value={r.study_type || ""}
+              onChange={(v) => upd("study_type", v as StudyType)}
+              options={["bsc", "masters", "english_certificate"]}
+            />
+          </label>
+          <label className="grid gap-1.5">
+            <span className="text-sm font-medium text-foreground">Programme Name</span>
+            <input
+              className={inputCls}
               value={r.program}
-              onChange={(v) => upd("program", v)}
-              options={PROGRAMS}
+              onChange={(e) => upd("program", e.target.value)}
+              placeholder="e.g. BSc Computer Science"
+              required={r.study_type !== "english_certificate"}
             />
           </label>
           <label className="grid gap-1.5">
@@ -177,12 +199,44 @@ function EditStudent() {
               required
             />
           </label>
+          {r.study_type === "bsc" && (
+            <label className="grid gap-1.5">
+              <span className="text-sm font-medium text-foreground">BSc Level</span>
+              <PremiumSelect
+                value={r.academic_stage || ""}
+                onChange={(v) => upd("academic_stage", v as AcademicStage)}
+                options={["level_100", "level_200", "level_300", "level_400"]}
+              />
+            </label>
+          )}
+          {r.study_type === "masters" && (
+            <label className="grid gap-1.5">
+              <span className="text-sm font-medium text-foreground">Master's Year</span>
+              <PremiumSelect
+                value={r.academic_stage || ""}
+                onChange={(v) => upd("academic_stage", v as AcademicStage)}
+                options={["masters_year_1", "masters_year_2"]}
+              />
+            </label>
+          )}
+          {r.study_type === "english_certificate" && (
+            <label className="grid gap-1.5">
+              <span className="text-sm font-medium text-foreground">Plan After Certificate</span>
+              <PremiumSelect
+                value={r.english_certificate_pathway || ""}
+                onChange={(v) => upd("english_certificate_pathway", v as EnglishPathway)}
+                options={["leave_after_certificate", "continue_to_bsc", "continue_to_masters"]}
+              />
+            </label>
+          )}
           <label className="grid gap-1.5">
-            <span className="text-sm font-medium text-foreground">Current level</span>
-            <PremiumSelect
-              value={r.level}
-              onChange={(v) => upd("level", v as Level)}
-              options={[...LEVELS]}
+            <span className="text-sm font-medium text-foreground">Room Number</span>
+            <input
+              className={inputCls}
+              value={r.room_number || ""}
+              onChange={(e) => upd("room_number", e.target.value)}
+              placeholder="e.g. 105, A12, Block B-24"
+              required
             />
           </label>
           <label className="grid gap-1.5">

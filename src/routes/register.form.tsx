@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/command";
 import { isValidPhoneNumber } from "libphonenumber-js";
 import { useI18n, type Lang } from "@/lib/i18n";
-import { COUNTRIES, LEVELS, PROGRAMS, graduationYearFor, type Level } from "@/lib/mock-data";
+import { COUNTRIES, LEVELS, PROGRAMS, calcGraduationYear, type Level, type StudyType, type AcademicStage, type EnglishPathway } from "@/lib/mock-data";
 import { getDraft, saveDraft, type Draft } from "@/lib/reg-store";
 import { cn } from "@/lib/utils";
 
@@ -307,7 +307,25 @@ function RegisterForm() {
   const set = <K extends keyof Draft>(k: K, v: Draft[K]) =>
     setD((prev) => {
       const next = { ...prev, [k]: v };
-      if (k === "level") next.graduationYear = graduationYearFor(v as Level) as number;
+      
+      // Handle Study Type cascading resets
+      if (k === "study_type") {
+        next.academic_stage = undefined;
+        next.english_certificate_pathway = null;
+        if (v === "english_certificate") {
+          next.academic_stage = "english_certificate_year_1";
+          next.program = "English Certificate"; // Pre-fill or don't require
+        } else {
+          next.program = prev.program === "English Certificate" ? "" : prev.program;
+        }
+      }
+
+      if (k === "academic_stage" || k === "study_type") {
+        // Sync the legacy `level` field for backwards compatibility if needed, though we primarily use `academic_stage` now.
+        next.level = next.academic_stage as any;
+        next.graduationYear = calcGraduationYear(next.academic_stage as AcademicStage) as number;
+      }
+
       if (k === "sameWhatsapp" && v) {
         next.whatsapp = prev.phone;
         next.whatsappCode = prev.phoneCode;
@@ -321,11 +339,11 @@ function RegisterForm() {
 
   const validate = (): boolean => {
     const e: Errors = {};
-    if (!d.fullName?.trim()) e.fullName = t("required");
-    if (!d.email?.trim()) e.email = t("required");
-    else if (!/^\S+@\S+\.\S+$/.test(d.email)) e.email = t("invalid_email");
-    if (!d.gender) e.gender = t("required");
-    if (!d.country) e.country = t("required");
+    if (!d.fullName?.trim()) e.fullName = t("required") || "Required";
+    if (!d.email?.trim()) e.email = t("required") || "Required";
+    else if (!/^\S+@\S+\.\S+$/.test(d.email)) e.email = t("invalid_email") || "Invalid email";
+    if (!d.gender) e.gender = t("required") || "Required";
+    if (!d.country) e.country = t("required") || "Required";
     if (!d.phoneCode) {
       e.phone = "Select a country code first.";
     } else if (!d.phone?.trim()) {
@@ -343,11 +361,22 @@ function RegisterForm() {
         e.whatsapp = "This phone number is not valid for the selected country.";
       }
     }
-    if (!d.program) e.program = t("required");
-    if (d.program === "Other Program" && !d.otherProgram?.trim()) e.otherProgram = t("required");
-    if (!d.index?.trim()) e.index = t("required");
-    if (!d.level) e.level = t("required");
-    if (!consent) e.consent = t("required");
+    
+    if (!d.study_type) e.study_type = "Please select your study type.";
+    if (!d.room_number?.trim()) e.room_number = "Please enter your room number.";
+    
+    if (d.study_type !== "english_certificate") {
+      if (!d.program?.trim()) e.program = "Please enter your programme name.";
+      if (!d.academic_stage) e.academic_stage = "Please select your academic stage.";
+    } else {
+      if (!d.english_certificate_pathway) e.english_certificate_pathway = "Please select your plan after completing the English Certificate.";
+      if (d.english_certificate_pathway === "continue_to_bsc" || d.english_certificate_pathway === "continue_to_masters") {
+         if (!d.program?.trim()) e.program = "Please enter your intended programme name.";
+      }
+    }
+
+    if (!d.index?.trim()) e.index = t("required") || "Required";
+    if (!consent) e.consent = t("required") || "Required";
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -562,33 +591,99 @@ function RegisterForm() {
               </section>
 
               <section className="mb-6">
-                <SectionHeader title={t("sec_academic_info")} />
+                <SectionHeader title={t("sec_academic_info") || "Academic Information"} />
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div className="sm:col-span-2">
-                    <Field label={t("f_program")} required error={errors.program}>
+                    <Field label="Study Type" required error={errors.study_type}>
                       <PremiumSelect
-                        value={d.program ?? ""}
-                        onChange={(v) => set("program", v)}
-                        placeholder={t("f_program_ph")}
-                        error={errors.program}
-                        options={PROGRAMS.map((p) => ({ value: p, label: p }))}
+                        value={d.study_type ?? ""}
+                        onChange={(v) => set("study_type", v as StudyType)}
+                        placeholder="Select Study Type"
+                        error={errors.study_type}
+                        options={[
+                          { value: "bsc", label: "BSc" },
+                          { value: "masters", label: "Master’s" },
+                          { value: "english_certificate", label: "English Certificate" },
+                        ]}
                       />
                     </Field>
                   </div>
 
-                  {d.program === "Other Program" && (
-                    <div className="sm:col-span-2">
-                      <Field label={t("f_other_program")} required error={errors.otherProgram}>
-                        <input
-                          className={cn(inputCls, errors.otherProgram && "border-destructive")}
-                          value={d.otherProgram ?? ""}
-                          onChange={(e) => set("otherProgram", e.target.value)}
-                          placeholder="e.g. BSc Applied Physics"
+                  {d.study_type && d.study_type !== "english_certificate" && (
+                    <>
+                      <div className="sm:col-span-2">
+                        <Field label="Programme Name" required error={errors.program}>
+                          <input
+                            className={cn(inputCls, errors.program && "border-destructive")}
+                            value={d.program ?? ""}
+                            onChange={(e) => set("program", e.target.value)}
+                            placeholder="e.g. BSc Computer Science"
+                          />
+                        </Field>
+                      </div>
+
+                      <Field label={d.study_type === "bsc" ? "Current BSc Level" : "Current Master's Year"} required error={errors.academic_stage}>
+                        <PremiumSelect
+                          value={d.academic_stage ?? ""}
+                          onChange={(v) => set("academic_stage", v as AcademicStage)}
+                          placeholder="Select Level/Year"
+                          error={errors.academic_stage}
+                          options={
+                            d.study_type === "bsc"
+                              ? [
+                                  { value: "level_100", label: "Level 100" },
+                                  { value: "level_200", label: "Level 200" },
+                                  { value: "level_300", label: "Level 300" },
+                                  { value: "level_400", label: "Level 400" },
+                                ]
+                              : [
+                                  { value: "masters_year_1", label: "Master's Year 1" },
+                                  { value: "masters_year_2", label: "Master's Year 2" },
+                                ]
+                          }
                         />
                       </Field>
+                    </>
+                  )}
+
+                  {d.study_type === "english_certificate" && (
+                    <div className="sm:col-span-2 space-y-5">
+                      <Field label="Plan after English Certificate" required error={errors.english_certificate_pathway}>
+                        <PremiumSelect
+                          value={d.english_certificate_pathway ?? ""}
+                          onChange={(v) => set("english_certificate_pathway", v as EnglishPathway)}
+                          placeholder="Select your plan"
+                          error={errors.english_certificate_pathway}
+                          options={[
+                            { value: "leave_after_certificate", label: "Complete certificate and leave" },
+                            { value: "continue_to_bsc", label: "Continue to BSc" },
+                            { value: "continue_to_masters", label: "Continue to Master’s" },
+                          ]}
+                        />
+                      </Field>
+                      
+                      {(d.english_certificate_pathway === "continue_to_bsc" || d.english_certificate_pathway === "continue_to_masters") && (
+                        <Field label="Intended Programme Name" required error={errors.program}>
+                          <input
+                            className={cn(inputCls, errors.program && "border-destructive")}
+                            value={d.program ?? ""}
+                            onChange={(e) => set("program", e.target.value)}
+                            placeholder={d.english_certificate_pathway === "continue_to_bsc" ? "e.g. BSc Mathematics" : "e.g. Master in Public Health"}
+                          />
+                        </Field>
+                      )}
                     </div>
                   )}
 
+                  <Field label="Room Number" required error={errors.room_number}>
+                    <input
+                      className={cn(inputCls, errors.room_number && "border-destructive")}
+                      value={d.room_number ?? ""}
+                      onChange={(e) => set("room_number", e.target.value)}
+                      placeholder="e.g. 105 or A12"
+                    />
+                  </Field>
+                  
                   <Field label={t("f_index")} required error={errors.index}>
                     <input
                       className={cn(inputCls, errors.index && "border-destructive")}
@@ -597,29 +692,22 @@ function RegisterForm() {
                       placeholder="e.g. 9012345 or REF-123"
                     />
                   </Field>
-                  <Field label={t("f_level")} required error={errors.level}>
-                    <PremiumSelect
-                      value={d.level ?? ""}
-                      onChange={(v) => set("level", v as Level)}
-                      placeholder={t("f_select_level")}
-                      error={errors.level}
-                      options={LEVELS.map((l) => ({ value: l, label: l }))}
-                    />
-                  </Field>
 
-                  <div className="sm:col-span-2">
-                    <div className="graduation-panel">
-                      <div>
-                        <p className="text-sm font-medium text-primary-deep">{t("f_grad_year")}</p>
-                        <p className="mt-0.5 text-xs text-muted-foreground">
-                          {t("f_calc_level")}
+                  {d.study_type && d.academic_stage && (
+                    <div className="sm:col-span-2">
+                      <div className="graduation-panel">
+                        <div>
+                          <p className="text-sm font-medium text-primary-deep">{t("f_grad_year")}</p>
+                          <p className="mt-0.5 text-xs text-muted-foreground">
+                            Automatically calculated from your academic stage
+                          </p>
+                        </div>
+                        <p className="font-heading text-2xl font-bold tabular-nums text-primary-deep">
+                          {d.graduationYear || "—"}
                         </p>
                       </div>
-                      <p className="font-heading text-2xl font-bold tabular-nums text-primary-deep">
-                        {d.graduationYear || "—"}
-                      </p>
                     </div>
-                  </div>
+                  )}
                 </div>
               </section>
 

@@ -67,10 +67,15 @@ function ReviewPage() {
         program: d.program!,
         otherProgram: d.otherProgram,
         index: d.index!,
-        level: d.level!,
+        level: d.level || "Unknown",
         graduationYear: d.graduationYear as number,
         graduated: false,
         registrationDate: new Date().toISOString(),
+        study_type: d.study_type,
+        academic_stage: d.academic_stage,
+        room_number: d.room_number,
+        english_certificate_pathway: d.english_certificate_pathway,
+        programme_status: "active",
       };
 
       await addRegistration(reg);
@@ -147,10 +152,25 @@ function ReviewPage() {
                 />
               </InfoCard>
 
-              <InfoCard title={t("sec_academic_info")}>
-                <Row label={t("f_program")} value={programDisplay} />
+              <InfoCard title={t("sec_academic_info") || "Academic Information"}>
+                <Row label="Study Type" value={
+                  d.study_type === "bsc" ? "BSc" :
+                  d.study_type === "masters" ? "Master's" :
+                  d.study_type === "english_certificate" ? "English Certificate" : "—"
+                } />
+                <Row label="Programme" value={d.program} />
+                {d.study_type === "english_certificate" && (
+                  <Row label="Pathway" value={
+                    d.english_certificate_pathway === "leave_after_certificate" ? "Leave after certificate" :
+                    d.english_certificate_pathway === "continue_to_bsc" ? "Continue to BSc" :
+                    d.english_certificate_pathway === "continue_to_masters" ? "Continue to Master's" : "—"
+                  } />
+                )}
+                {d.study_type !== "english_certificate" && (
+                  <Row label="Academic Stage" value={d.academic_stage?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} />
+                )}
+                <Row label="Room Number" value={d.room_number} />
                 <Row label={t("f_index")} value={d.index} />
-                <Row label={t("f_level")} value={d.level} />
                 <Row label={t("f_grad_year")} value={d.graduationYear} />
               </InfoCard>
             </div>

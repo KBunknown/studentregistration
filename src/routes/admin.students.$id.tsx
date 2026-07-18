@@ -1,9 +1,9 @@
 import { createFileRoute, Link, useParams, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Mail, Phone, MessageCircle, MapPin, GraduationCap, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft, Mail, Phone, MessageCircle, MapPin, GraduationCap, Pencil, Trash2, ArrowRightCircle } from "lucide-react";
 import { toast } from "sonner";
 import { AdminShell } from "@/components/admin-shell";
-import { getAllRegistrations, deleteRegistration } from "@/lib/reg-store";
+import { getAllRegistrations, deleteRegistration, approveEnglishCertificateTransition } from "@/lib/reg-store";
 import type { Registration } from "@/lib/mock-data";
 
 export const Route = createFileRoute("/admin/students/$id")({
@@ -168,15 +168,56 @@ function StudentProfile() {
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Field
-          label="Program"
-          value={r.program === "Other Program" ? `${r.otherProgram} (Other)` : r.program}
+          label="Study Type"
+          value={r.study_type === "bsc" ? "BSc" : r.study_type === "masters" ? "Master\u0027s" : r.study_type === "english_certificate" ? "English Certificate" : "—"}
         />
-        <Field label="Current level" value={r.level} />
-        <Field label="Expected graduation" value={r.graduationYear} />
+        <Field
+          label="Program"
+          value={r.program}
+        />
+        <Field label="Academic Stage" value={r.academic_stage?.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || r.level || "—"} />
+        <Field label="Room Number" value={r.room_number || "—"} />
+        {r.study_type === "english_certificate" && (
+          <Field label="Pathway" value={
+            r.english_certificate_pathway === "leave_after_certificate" ? "Leave after certificate" :
+            r.english_certificate_pathway === "continue_to_bsc" ? "Continue to BSc" :
+            r.english_certificate_pathway === "continue_to_masters" ? "Continue to Master\u0027s" : "—"
+          } />
+        )}
+        <Field label="Programme Status" value={r.programme_status || "active"} />
         <Field label="Gender" value={r.gender} />
         <Field label="Registration date" value={new Date(r.registrationDate).toLocaleString()} />
         <Field label="Graduation status" value={r.graduated ? "Graduated" : "Active Student"} />
       </div>
+
+      {/* English Certificate Transition Section */}
+      {r.study_type === "english_certificate" && r.english_certificate_pathway && r.english_certificate_pathway !== "leave_after_certificate" && (
+        <div className="mt-6 glass-panel rounded-xl p-6 shadow-card">
+          <h3 className="font-heading text-base font-semibold text-primary-navy mb-4">Approve Academic Transition</h3>
+          <p className="text-sm text-muted-foreground mb-4">
+            This student has indicated they intend to continue to <strong>{r.english_certificate_pathway === "continue_to_bsc" ? "BSc" : "Master\u0027s"}</strong>.
+            After verifying the English Certificate has been completed, click below to approve the transition.
+          </p>
+          <button
+            onClick={async () => {
+              const programmeName = prompt("Enter the programme name for the student's new programme:");
+              if (!programmeName?.trim()) { toast.error("Programme name is required."); return; }
+              const newType = r.english_certificate_pathway === "continue_to_bsc" ? "bsc" : "masters";
+              const newStage = r.english_certificate_pathway === "continue_to_bsc" ? "level_100" : "masters_year_1";
+              try {
+                await approveEnglishCertificateTransition(r.id!, newType, newStage, programmeName.trim());
+                toast.success("Transition approved successfully! Refreshing...");
+                setTimeout(() => window.location.reload(), 1200);
+              } catch (err: any) {
+                toast.error(err?.message || "Failed to approve transition");
+              }
+            }}
+            className="inline-flex items-center gap-2 rounded-md bg-success px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-success/90"
+          >
+            <ArrowRightCircle className="h-4 w-4" /> Approve Transition to {r.english_certificate_pathway === "continue_to_bsc" ? "BSc" : "Master\u0027s"}
+          </button>
+        </div>
+      )}
 
       {r.duplicateOf && (
         <div className="mt-6 flex items-start gap-3 rounded-xl border border-warning/30 bg-warning/5 p-5 text-sm text-warning-foreground">

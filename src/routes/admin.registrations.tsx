@@ -99,6 +99,7 @@ function RegistrationsPage() {
   const [showExport, setShowExport] = useState(false);
   const [showInvite, setShowInvite] = useState(false);
   const [filters, setFilters] = useState({
+    study_type: "",
     program: "",
     level: "",
     gradYear: "",
@@ -126,8 +127,9 @@ function RegistrationsPage() {
           r.index.includes(s),
       );
     }
+    if (filters.study_type) out = out.filter((r) => r.study_type === filters.study_type);
     if (filters.program) out = out.filter((r) => r.program === filters.program);
-    if (filters.level) out = out.filter((r) => r.level === filters.level);
+    if (filters.level) out = out.filter((r) => (r.academic_stage || r.level) === filters.level);
     if (filters.gradYear) out = out.filter((r) => String(r.graduationYear) === filters.gradYear);
     if (filters.gradStatus)
       out = out.filter((r) => (filters.gradStatus === "graduated") === r.graduated);
@@ -144,7 +146,7 @@ function RegistrationsPage() {
       name_asc: (a, b) => a.fullName.localeCompare(b.fullName),
       name_desc: (a, b) => b.fullName.localeCompare(a.fullName),
       program: (a, b) => a.program.localeCompare(b.program),
-      level: (a, b) => a.level.localeCompare(b.level),
+      level: (a, b) => (a.academic_stage || a.level || "").localeCompare(b.academic_stage || b.level || ""),
       grad_year: (a, b) => a.graduationYear - b.graduationYear,
       country: (a, b) => a.country.localeCompare(b.country),
       graduation_status: (a, b) => Number(a.graduated) - Number(b.graduated),
@@ -156,6 +158,7 @@ function RegistrationsPage() {
 
   const clearFilters = () =>
     setFilters({
+      study_type: "",
       program: "",
       level: "",
       gradYear: "",
@@ -230,16 +233,22 @@ function RegistrationsPage() {
         <div className="glass-panel mt-4 rounded-xl p-5">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <FilterSelect
+              label="Study Type"
+              value={filters.study_type}
+              onChange={(v) => setFilters({ ...filters, study_type: v })}
+              options={["bsc", "masters", "english_certificate"]}
+            />
+            <FilterSelect
               label="Program"
               value={filters.program}
               onChange={(v) => setFilters({ ...filters, program: v })}
               options={PROGRAMS}
             />
             <FilterSelect
-              label="Level"
+              label="Academic Stage"
               value={filters.level}
               onChange={(v) => setFilters({ ...filters, level: v })}
-              options={[...LEVELS]}
+              options={["level_100", "level_200", "level_300", "level_400", "masters_year_1", "masters_year_2", "english_certificate_year_1"]}
             />
             <FilterSelect
               label="Expected graduation year"
@@ -313,14 +322,14 @@ function RegistrationsPage() {
             <thead className="bg-primary-soft/40">
               <tr>
                 <Th>Full name</Th>
+                <Th>Study Type</Th>
                 <Th>Index</Th>
                 <Th>Program</Th>
-                <Th>Level</Th>
-                <Th>Grad. year</Th>
+                <Th>Stage</Th>
+                <Th>Room</Th>
                 <Th>Status</Th>
                 <Th>Country</Th>
                 <Th>Email</Th>
-                <Th>WhatsApp</Th>
                 <Th>Registered</Th>
                 <Th className="text-right">Actions</Th>
               </tr>
@@ -344,12 +353,22 @@ function RegistrationsPage() {
                         {r.fullName}
                       </Link>
                     </Td>
+                    <Td>
+                      <span className={cn("inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide",
+                        r.study_type === "bsc" ? "border-blue-200 bg-blue-50 text-blue-700" :
+                        r.study_type === "masters" ? "border-purple-200 bg-purple-50 text-purple-700" :
+                        r.study_type === "english_certificate" ? "border-amber-200 bg-amber-50 text-amber-700" :
+                        "border-gray-200 bg-gray-50 text-gray-500"
+                      )}>
+                        {r.study_type === "bsc" ? "BSc" : r.study_type === "masters" ? "Master's" : r.study_type === "english_certificate" ? "Eng. Cert." : "—"}
+                      </span>
+                    </Td>
                     <Td className="font-mono text-xs">{r.index}</Td>
                     <Td className="max-w-[180px] truncate" title={r.program}>
                       {r.program}
                     </Td>
-                    <Td>{r.level}</Td>
-                    <Td>{r.graduationYear}</Td>
+                    <Td>{r.academic_stage?.replace(/_/g, ' ') || r.level || "—"}</Td>
+                    <Td>{r.room_number || "—"}</Td>
                     <Td>
                       <StatusBadge graduated={r.graduated} />
                     </Td>
@@ -357,9 +376,7 @@ function RegistrationsPage() {
                     <Td className="max-w-[180px] truncate" title={r.email}>
                       {r.email}
                     </Td>
-                    <Td>
-                      {r.whatsappCode} {r.whatsapp}
-                    </Td>
+
                     <Td className="whitespace-nowrap text-muted-foreground">
                       {new Date(r.registrationDate).toLocaleDateString()}
                     </Td>
@@ -414,12 +431,20 @@ function RegistrationsPage() {
               </div>
               <dl className="mt-4 grid grid-cols-2 gap-x-3 gap-y-3 text-sm">
                 <div className="col-span-2">
+                  <dt className="mb-0.5 text-muted-foreground">Study Type</dt>
+                  <dd className="font-medium text-foreground">{r.study_type === "bsc" ? "BSc" : r.study_type === "masters" ? "Master's" : r.study_type === "english_certificate" ? "English Certificate" : "—"}</dd>
+                </div>
+                <div className="col-span-2">
                   <dt className="mb-0.5 text-muted-foreground">Programme</dt>
                   <dd className="truncate font-medium text-foreground">{r.program}</dd>
                 </div>
                 <div>
-                  <dt className="mb-0.5 text-muted-foreground">Level</dt>
-                  <dd className="font-medium text-foreground">{r.level}</dd>
+                  <dt className="mb-0.5 text-muted-foreground">Academic Stage</dt>
+                  <dd className="font-medium text-foreground">{r.academic_stage?.replace(/_/g, ' ') || r.level || "—"}</dd>
+                </div>
+                <div>
+                  <dt className="mb-0.5 text-muted-foreground">Room</dt>
+                  <dd className="font-medium text-foreground">{r.room_number || "—"}</dd>
                 </div>
                 <div>
                   <dt className="mb-0.5 text-muted-foreground">Grad. year</dt>
