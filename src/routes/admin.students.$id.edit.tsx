@@ -186,7 +186,7 @@ function EditStudent() {
               className={inputCls}
               value={r.program}
               onChange={(e) => upd("program", e.target.value)}
-              placeholder="e.g. BSc Computer Science"
+              placeholder={r.study_type === "masters" ? "e.g. MSc Public Health" : "e.g. BSc Computer Science"}
               required={r.study_type !== "english_certificate"}
             />
           </label>
@@ -235,7 +235,7 @@ function EditStudent() {
               className={inputCls}
               value={r.room_number || ""}
               onChange={(e) => upd("room_number", e.target.value)}
-              placeholder="e.g. 105, A12, Block B-24"
+              placeholder="e.g. KT 000 B"
               required
             />
           </label>

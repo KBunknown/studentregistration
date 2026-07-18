@@ -617,7 +617,7 @@ function RegisterForm() {
                             className={cn(inputCls, errors.program && "border-destructive")}
                             value={d.program ?? ""}
                             onChange={(e) => set("program", e.target.value)}
-                            placeholder="e.g. BSc Computer Science"
+                            placeholder={d.study_type === "masters" ? "e.g. MSc Public Health" : "e.g. BSc Computer Science"}
                           />
                         </Field>
                       </div>
@@ -668,7 +668,7 @@ function RegisterForm() {
                             className={cn(inputCls, errors.program && "border-destructive")}
                             value={d.program ?? ""}
                             onChange={(e) => set("program", e.target.value)}
-                            placeholder={d.english_certificate_pathway === "continue_to_bsc" ? "e.g. BSc Mathematics" : "e.g. Master in Public Health"}
+                            placeholder={d.english_certificate_pathway === "continue_to_bsc" ? "e.g. BSc Mathematics" : "e.g. MSc Public Health"}
                           />
                         </Field>
                       )}
@@ -680,7 +680,7 @@ function RegisterForm() {
                       className={cn(inputCls, errors.room_number && "border-destructive")}
                       value={d.room_number ?? ""}
                       onChange={(e) => set("room_number", e.target.value)}
-                      placeholder="e.g. 105 or A12"
+                      placeholder="e.g. KT 000 B"
                     />
                   </Field>
                   
