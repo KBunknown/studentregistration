@@ -176,7 +176,14 @@ function EditStudent() {
             <span className="text-sm font-medium text-foreground">Study Type</span>
             <PremiumSelect
               value={r.study_type || ""}
-              onChange={(v) => upd("study_type", v as StudyType)}
+              onChange={(v) => {
+                if (r.study_type !== v) {
+                  upd("study_type", v as StudyType);
+                  upd("program", "");
+                  upd("academic_stage", undefined as any);
+                  upd("english_certificate_pathway", undefined as any);
+                }
+              }}
               options={["bsc", "masters", "english_certificate"]}
             />
           </label>
@@ -224,7 +231,12 @@ function EditStudent() {
               <span className="text-sm font-medium text-foreground">Plan After Certificate</span>
               <PremiumSelect
                 value={r.english_certificate_pathway || ""}
-                onChange={(v) => upd("english_certificate_pathway", v as EnglishPathway)}
+                onChange={(v) => {
+                  if (r.english_certificate_pathway !== v) {
+                    upd("english_certificate_pathway", v as EnglishPathway);
+                    upd("program", "");
+                  }
+                }}
                 options={["leave_after_certificate", "continue_to_bsc", "continue_to_masters"]}
               />
             </label>

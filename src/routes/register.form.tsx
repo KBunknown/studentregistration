@@ -597,7 +597,14 @@ function RegisterForm() {
                     <Field label="Study Type" required error={errors.study_type}>
                       <PremiumSelect
                         value={d.study_type ?? ""}
-                        onChange={(v) => set("study_type", v as StudyType)}
+                        onChange={(v) => {
+                          if (d.study_type !== v) {
+                            set("study_type", v as StudyType);
+                            set("program", "");
+                            set("academic_stage", "" as any);
+                            set("english_certificate_pathway", "" as any);
+                          }
+                        }}
                         placeholder="Select Study Type"
                         error={errors.study_type}
                         options={[
@@ -651,7 +658,12 @@ function RegisterForm() {
                       <Field label="Plan after English Certificate" required error={errors.english_certificate_pathway}>
                         <PremiumSelect
                           value={d.english_certificate_pathway ?? ""}
-                          onChange={(v) => set("english_certificate_pathway", v as EnglishPathway)}
+                          onChange={(v) => {
+                            if (d.english_certificate_pathway !== v) {
+                              set("english_certificate_pathway", v as EnglishPathway);
+                              set("program", "");
+                            }
+                          }}
                           placeholder="Select your plan"
                           error={errors.english_certificate_pathway}
                           options={[
