@@ -482,7 +482,7 @@ function RegistrationsPage() {
         )}
       </div>
 
-      {showExport && <ExportDialog onClose={() => setShowExport(false)} count={filtered.length} />}
+      {showExport && <ExportDialog onClose={() => setShowExport(false)} count={filtered.length} regs={regs} filtered={filtered} />}
       {showInvite && <InviteDialog onClose={() => setShowInvite(false)} />}
     </AdminShell>
   );
@@ -578,16 +578,67 @@ function Modal({
     </div>
   );
 }
-function ExportDialog({ onClose, count }: { onClose: () => void; count: number }) {
+function ExportDialog({ onClose, count, regs, filtered }: { onClose: () => void; count: number; regs: Registration[]; filtered: Registration[] }) {
   const [fmt, setFmt] = useState("csv");
   const [scope, setScope] = useState("filtered");
+  const handleExport = () => {
+    const dataToExport = scope === "all" ? regs : filtered;
+    if (dataToExport.length === 0) {
+      toast.error("No records to export.");
+      return;
+    }
+
+    let content = "";
+    let mimeType = "text/plain";
+
+    if (fmt === "json") {
+      content = JSON.stringify(dataToExport, null, 2);
+      mimeType = "application/json";
+    } else {
+      const headers = ["Index", "Full Name", "Email", "Study Type", "Program", "Academic Stage", "Room Number", "Pathway", "Gender", "Country", "Phone", "WhatsApp", "Graduation Year", "Graduated", "Date"];
+      const rows = dataToExport.map(r => [
+        r.index,
+        r.fullName,
+        r.email,
+        r.study_type || "",
+        r.program,
+        r.academic_stage || r.level || "",
+        r.room_number || "",
+        r.english_certificate_pathway || "",
+        r.gender || "",
+        r.country || "",
+        r.phoneCode ? `${r.phoneCode} ${r.phone}` : r.phone || "",
+        r.whatsappCode ? `${r.whatsappCode} ${r.whatsapp}` : r.whatsapp || "",
+        r.graduationYear || "",
+        r.graduated ? "Yes" : "No",
+        r.registrationDate
+      ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(","));
+      
+      content = [headers.join(","), ...rows].join("\n");
+      mimeType = "text/csv";
+    }
+
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `registrations_${scope}_${new Date().toISOString().split("T")[0]}.${fmt}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    toast.success(`Successfully exported ${dataToExport.length} records`);
+    onClose();
+  };
+
   return (
     <Modal title="Export Data" onClose={onClose}>
       <div className="grid gap-5">
         <div className="grid gap-2">
           <label className="text-sm font-medium text-foreground">File Format</label>
           <div className="flex gap-2">
-            {["csv", "xlsx", "json"].map((f) => (
+            {["csv", "json"].map((f) => (
               <button
                 key={f}
                 onClick={() => setFmt(f)}
@@ -650,10 +701,7 @@ function ExportDialog({ onClose, count }: { onClose: () => void; count: number }
             Cancel
           </button>
           <button
-            onClick={() => {
-              toast.success("Export queued successfully");
-              onClose();
-            }}
+            onClick={handleExport}
             className="rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-deep"
           >
             Start Export
